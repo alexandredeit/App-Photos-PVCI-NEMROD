@@ -94,6 +94,8 @@ footer.dock{position:fixed;left:0;right:0;bottom:0;background:var(--surface);bor
 footer.dock .wrap{padding-block:10px;display:flex;gap:8px;align-items:center}
 .btn{font:700 16px var(--f-display);letter-spacing:.06em;text-transform:uppercase;padding:12px 16px;border-radius:8px;border:0;cursor:pointer}
 .btn.main{flex:1;background:var(--fg);color:var(--bg)}
+.btn.send{background:var(--accent);color:var(--accent-fg)}
+.ver{font:500 12px var(--f-mono);color:var(--muted);letter-spacing:0;text-transform:none;vertical-align:middle}
 .btn.ghost{background:var(--chip);color:var(--fg)}
 .btn:disabled{opacity:.5;cursor:default}
 #msg{font-size:13px;color:var(--muted);min-height:1em}
@@ -109,7 +111,7 @@ footer.dock .wrap{padding-block:10px;display:flex;gap:8px;align-items:center}
 <body>
 
 <header class="top"><div class="wrap">
-  <div class="brand"><h1>Photos PVCI NEMROD</h1><span class="count" id="count">0 photo</span></div>
+  <div class="brand"><h1>Photos PVCI NEMROD <small class="ver">v1.1</small></h1><span class="count" id="count">0 photo</span></div>
   <div class="igrow"><label for="ig">Code IG</label><input id="ig" placeholder="ex. 33318001" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
   <div class="bar" aria-hidden="true"><i id="prog"></i></div>
   <div class="tools">
@@ -127,6 +129,7 @@ footer.dock .wrap{padding-block:10px;display:flex;gap:8px;align-items:center}
 <footer class="dock"><div class="wrap" style="flex-direction:column;align-items:stretch;gap:6px">
   <div style="display:flex;gap:8px">
     <button class="btn main" id="exp">Exporter le ZIP</button>
+    <button class="btn send" id="send">Envoyer</button>
     <button class="btn ghost" id="reset">Nouvel audit</button>
   </div>
   <div id="msg" role="status"></div>
@@ -233,7 +236,7 @@ function render(){
     list.appendChild(d);
   });
   const rules=document.createElement("div");rules.className="sec rules";
-  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
+  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 1.1 · envoi du ZIP final par mail avec le bouton « Envoyer ».</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
   list.appendChild(rules);
   stats();
 }
@@ -264,6 +267,7 @@ function stats(){
   $("#prog").style.width=(codes.length?done/codes.length*100:0)+"%";
   const nSaved=photos.filter(p=>p.saved).length, miss=photos.length-nSaved;
   $("#count").textContent=`${photos.length} photo${photos.length>1?"s":""} · ${done}/${codes.length} lignes · ${nSaved} sur le tél.`;
+  if(typeof prepared!=="undefined"&&prepared&&prepared.count!==photos.length){prepared=null;const sb=document.getElementById("send");if(sb)sb.textContent="Envoyer"}
   const gb=$("#fGallery");gb.hidden=!miss||savingAll;gb.textContent=`Vers la galerie (${miss})`;
   const mb=$("#fMissing");mb.hidden=!miss||savingAll;mb.textContent=`Sauvegarder ${miss} nouvelle${miss>1?"s":""} photo${miss>1?"s":""} (1 ZIP)`;mb.classList.toggle("urgent",miss>=15);
   const fs=$("#fSave");fs.setAttribute("aria-pressed",state.saveEach===true);fs.textContent="Copie photo par photo : "+(state.saveEach===true?"activée":"désactivée");
@@ -356,6 +360,51 @@ async function toGallery(){
   render();
 }
 $("#fGallery").onclick=toGallery;
+// --- Envoi du ZIP final (mail, Outlook, Gmail, WeTransfer, Teams...) en 2 temps : préparer puis envoyer ---
+let prepared=null;
+function resetSend(){prepared=null;const b=$("#send");if(b)b.textContent="Envoyer"}
+async function buildExportZip(){
+  const zip=new JSZip();const rows=[["Section","Désignation","Statut","Nb photos","Fichiers","Commentaire"]];
+  const groups=[...SECTIONS.map(([s,a])=>[s,a.map(x=>x[0])]),["Photos libres",state.extra]];
+  groups.forEach(([s,codes])=>codes.forEach(c=>{
+    const ps=itemPhotos(c);const names=ps.map((p,i)=>fileName(c,i,ps.length));
+    ps.forEach((p,i)=>zip.file(names[i],p.blob,{date:new Date(p.ts)}));
+    rows.push([s,(ITEMS[c]||{l:c}).l,state.st[c]||"",ps.length,names.join(" | "),state.cm[c]||""]);
+  }));
+  zip.file(`${state.ig}_recap_photos.csv`,"﻿"+rows.map(r=>r.map(csvCell).join(";")).join("\r\n"));
+  return zip.generateAsync();
+}
+$("#send").onclick=async()=>{
+  const b=$("#send");
+  if(!state.ig){msg("Renseigne le code IG avant d'envoyer.");$("#ig").focus();return}
+  if(!photos.length){msg("Aucune photo à envoyer.");return}
+  if(prepared&&prepared.count!==photos.length)resetSend();
+  if(!prepared){
+    b.disabled=true;msg("Préparation de l'envoi…");
+    try{
+      const blob=await buildExportZip();
+      const file=new File([blob],`${state.ig}_photos_audit.zip`,{type:"application/zip"});
+      prepared={file,count:photos.length};
+      const mb_=blob.size/1048576,mo=mb_<10?mb_.toFixed(1).replace(".",","):mb_.toFixed(0);
+      b.textContent=`Envoyer (${mo} Mo)`;
+      msg(blob.size>20*1048576
+        ?`ZIP prêt : ${mo} Mo, trop lourd pour une pièce jointe classique (limite ~20 Mo). Appuie sur « Envoyer », puis choisis Outlook ou Gmail (ils le transforment en lien OneDrive / Drive) ou WeTransfer.`
+        :`ZIP prêt : ${mo} Mo. Appuie sur « Envoyer » et choisis ta messagerie.`);
+    }catch(e){msg("Préparation impossible ("+(e&&e.message||"erreur")+").");resetSend()}
+    finally{b.disabled=false}
+    return;
+  }
+  const data={files:[prepared.file],title:`Photos audit ${state.ig}`,text:`Reportage photos PVCI - site ${state.ig} (${prepared.count} photos + récap CSV).`};
+  let ok=false;try{ok=!!(navigator.canShare&&navigator.canShare(data))}catch(e){}
+  if(ok){
+    try{await navigator.share(data);msg("Envoi lancé. Vérifie l'envoi dans ta messagerie.");resetSend()}
+    catch(e){msg(e&&e.name==="AbortError"?"Envoi annulé. Appuie de nouveau sur « Envoyer » pour réessayer.":"Envoi impossible ("+(e&&e.name||"erreur")+"). Utilise « Exporter le ZIP » puis joins-le à ton mail.")}
+  }else{
+    download(prepared.file.name,prepared.file);
+    msg("Ce navigateur ne peut pas ouvrir la messagerie directement : le ZIP est téléchargé, joins-le à ton mail depuis Téléchargements.");
+    resetSend();
+  }
+};
 let installEvt=null;
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;$("#install").hidden=false});
 $("#install").onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;$("#install").hidden=true};
