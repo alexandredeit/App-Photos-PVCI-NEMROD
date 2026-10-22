@@ -272,12 +272,12 @@ header.top,.pill,footer.dock{will-change:transform}
 .edbar .col{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
 .edbar .col.on{border-color:var(--fg);box-shadow:0 0 0 2px var(--surface) inset}
 .edm .mrow{width:100%}
-.need{display:inline-block;margin-top:4px;font:600 12px var(--f-mono);padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--nok) 15%,transparent);color:var(--nok)}\n.need.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}\nheader.top .count{white-space:normal!important}\n</style>
+.need{display:inline-block;margin-top:4px;font:600 12px var(--f-mono);padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--nok) 15%,transparent);color:var(--nok)}\n.need.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}\nheader.top .count{white-space:normal!important}\n.tog.galall{border-color:var(--ok);color:var(--ok)}\n</style>
 </head>
 <body>
 
 <header class="top"><div class="wrap">
-  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><img src="data:image/png;base64,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" alt="" width="34" height="34"></button><h1>PVCI NEMROD <small class="ver">v3.3</small><small class="igmini" id="igmini"></small></h1></div><span class="count" id="count"></span></div>
+  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><img src="data:image/png;base64,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" alt="" width="34" height="34"></button><h1>PVCI NEMROD <small class="ver">v3.4</small><small class="igmini" id="igmini"></small></h1></div><span class="count" id="count"></span></div>
   <div class="igrow"><label for="ig">Code IG</label><input id="ig" placeholder="ex. 33318001" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
   <div class="nav" id="nav"><button data-v="photos" aria-current="false">Photos<span class="n" id="navP"></span></button><button data-v="excel" aria-current="false">Excel<span class="n" id="navX"></span></button><button data-v="guide" aria-current="false">Visite<span class="n" id="navG"></span></button></div>
   <div class="bar" aria-hidden="true"><i id="prog"></i></div>
@@ -427,7 +427,7 @@ function render(){
     list.appendChild(d);
   });
   const rules=document.createElement("div");rules.className="sec rules";
-  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 3.3 · le ZIP final (CodeIG_auditPVCI_date.zip) contient le PVCI Excel rempli, le récap CSV et un dossier Photos.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
+  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 3.4 · le ZIP final (CodeIG_auditPVCI_date.zip) contient le PVCI Excel rempli, le récap CSV et un dossier Photos.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
   list.appendChild(rules);
   stats();
   if(view==="guide"&&typeof renderGuide==="function")renderGuide();
@@ -467,7 +467,7 @@ function stats(){
   if(typeof prepared!=="undefined"&&prepared&&prepared.count!==photos.length){prepared=null;const sb=document.getElementById("send");if(sb)sb.textContent="Envoyer"}
   const gb=$("#fGallery");gb.hidden=!miss||savingAll||view!=="photos";gb.textContent=`Vers la galerie (${miss})`;
   const mb=$("#fMissing");mb.hidden=!miss||savingAll||view!=="photos";mb.textContent=`Sauvegarder ${miss} nouvelle${miss>1?"s":""} photo${miss>1?"s":""} (1 ZIP)`;mb.classList.toggle("urgent",miss>=15);
-  const fs=$("#fSave");fs.hidden=view!=="photos";fs.setAttribute("aria-pressed",state.saveEach===true);fs.textContent="Copie photo par photo : "+(state.saveEach===true?"activée":"désactivée");
+  const fs=$("#fSave");fs.hidden=view!=="photos"||!photos.length;fs.removeAttribute("aria-pressed");fs.classList.add("galall");fs.textContent=galLabel();
   $("#ig").classList.toggle("empty",!state.ig);
 }
 
@@ -612,7 +612,7 @@ try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}ca
 
 $("#ig").value=state.ig;
 $("#ig").oninput=e=>{const v=cleanIG(e.target.value);if(v!==e.target.value)e.target.value=v;state.ig=v;lsSet();render();renderHome();xRefreshIG();if(typeof resetSend==="function")resetSend()};
-$("#fSave").onclick=()=>{state.saveEach=state.saveEach===false;lsSet();stats()};
+$("#fSave").onclick=()=>allToGallery();
 $("#fTodo").onclick=e=>{filterTodo=!filterTodo;e.target.setAttribute("aria-pressed",filterTodo);render();renderX()};
 $("#fOpen").onclick=e=>{const on=e.target.getAttribute("aria-pressed")!=="true";e.target.setAttribute("aria-pressed",on);e.target.textContent=on?"Tout replier":"Tout déplier";document.querySelectorAll(view==="excel"?"#xlist details.sec":"#list details.sec").forEach(d=>d.open=on)};
 
@@ -1232,6 +1232,29 @@ async function thumbBackfill(){
     const old=urls.get(p.id);const nu=URL.createObjectURL(p.th);urls.set(p.id,nu);document.querySelectorAll(`img[data-ed="${p.id}"]`).forEach(im=>im.src=nu);if(old)setTimeout(()=>URL.revokeObjectURL(old),2000)}}
   finally{thumbBusy=false}
 }
+// ---------- Toutes les photos vers la galerie (y compris déjà enregistrées) ----------
+const GAL_LOT=40;let galLot=0;
+function galOrdered(){const l=[];allCodes().forEach(c=>itemPhotos(c).forEach(p=>l.push(p)));return l}
+function galLabel(){const n=photos.length,lots=Math.ceil(n/GAL_LOT);return lots>1&&galLot>0?`Galerie : lot ${galLot+1}/${lots}`:`Toutes les photos vers la galerie (${n})`}
+async function allToGallery(){
+  if(!state.ig){msg("Renseigne le code IG avant, pour que les photos aient le bon nom.");$("#ig").focus();return}
+  const all=galOrdered();if(!all.length)return;const lots=Math.ceil(all.length/GAL_LOT);if(galLot>=lots)galLot=0;
+  const part=all.slice(galLot*GAL_LOT,(galLot+1)*GAL_LOT);
+  const files=part.map(p=>new File([p.blob],nameOf(p),{type:"image/jpeg",lastModified:p.ts}));
+  let ok=false;try{ok=!!(navigator.canShare&&navigator.canShare({files}))}catch(e){}
+  if(ok){
+    try{await navigator.share({files});
+      for(const p of part){if(!p.saved){p.saved=true;idb("readwrite",s=>s.put(p))}}
+      galLot++;const more=galLot<lots;
+      msg(more?`Lot ${galLot}/${lots} envoyé (« Enregistrer ${part.length} images » sur iPhone). Appuie encore pour le lot suivant.`:`${all.length} photo${all.length>1?"s":""} envoyée${all.length>1?"s":""} vers la galerie (iPhone : « Enregistrer les images »).`);
+      if(!more)galLot=0;
+    }catch(e){msg(e&&e.name==="AbortError"?"Envoi vers la galerie annulé.":"Envoi impossible ("+(e&&e.name||"erreur")+").")}
+  }else{
+    for(const [i,p] of all.entries()){download(nameOf(p),p.blob);if(!p.saved){p.saved=true;idb("readwrite",s=>s.put(p))}if(i<all.length-1)await new Promise(r=>setTimeout(r,350))}
+    galLot=0;msg(`${all.length} photo${all.length>1?"s":""} téléchargée${all.length>1?"s":""} : elles apparaissent dans la galerie (dossier Download).`);
+  }
+  render();
+}
 // ---------- Annotation ----------
 let ed=null;
 async function openEditor(p){
@@ -1454,7 +1477,7 @@ $("#checkModal").addEventListener("click",e=>{if(e.target.id==="checkModal"||e.t
 document.querySelectorAll("[data-check]").forEach(b=>b.onclick=openCheck);
 
 (async()=>{
-  lsGet();if(!state.v3){state.saveEach=false;state.v3=1}if(!state.xl)state.xl={};
+  lsGet();if(!state.v3){state.v3=1}state.saveEach=false;if(!state.xl)state.xl={};
   if(!state.siteId){state.siteId=newId();state.created=state.created||Date.now()}
   $("#ig").value=state.ig;buildSteps();render();renderX();setView(state.view||"home",true);
   const all=await idb("readonly",s=>s.getAll())||[];
