@@ -159,12 +159,25 @@ details.spec div{font-size:12px;color:var(--muted);white-space:pre-line;padding-
 .imp b{font-family:var(--f-display);font-size:18px;letter-spacing:.04em;text-transform:uppercase}
 .imp p{margin:0;font-size:14px;color:var(--muted)}
 .imp .row{display:flex;gap:8px;flex-wrap:wrap}
+
+header.top{position:fixed!important;left:0;right:0;top:env(safe-area-inset-top,0px)!important}
+#hspace{height:240px}
+.igmini{display:none;font:600 13px var(--f-mono);color:var(--accent);margin-left:8px;letter-spacing:0;text-transform:none}
+header.top.compact .wrap{padding-block:6px;gap:6px}
+header.top.compact .igrow,header.top.compact .tools,header.top.compact .count{display:none}
+header.top.compact h1{font-size:18px}
+header.top.compact .ver{display:none}
+header.top.compact .igmini{display:inline}
+header.top.compact .homebtn,header.top.compact .homebtn img{width:28px;height:28px}
+header.top.compact .nav button{padding:6px 6px;font-size:14px}
+header.top{transition:box-shadow .2s}
+header.top.compact{box-shadow:0 2px 10px rgba(0,0,0,.18)}
 </style>
 </head>
 <body>
 
 <header class="top"><div class="wrap">
-  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><img src="data:image/png;base64,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" alt="" width="34" height="34"></button><h1>PVCI NEMROD <small class="ver">v2.4</small></h1></div><span class="count" id="count"></span></div>
+  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><img src="data:image/png;base64,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" alt="" width="34" height="34"></button><h1>PVCI NEMROD <small class="ver">v2.5</small><small class="igmini" id="igmini"></small></h1></div><span class="count" id="count"></span></div>
   <div class="igrow"><label for="ig">Code IG</label><input id="ig" placeholder="ex. 33318001" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
   <div class="nav" id="nav"><button data-v="photos" aria-current="false">Photos<span class="n" id="navP"></span></button><button data-v="excel" aria-current="false">Excel<span class="n" id="navX"></span></button></div>
   <div class="bar" aria-hidden="true"><i id="prog"></i></div>
@@ -180,7 +193,7 @@ details.spec div{font-size:12px;color:var(--muted);white-space:pre-line;padding-
   </div>
 </div></header>
 
-<main><div class="wrap" id="home"></div><div class="wrap" id="list" hidden></div><div class="wrap" id="xlist" hidden></div></main>
+<div id="hspace" aria-hidden="true"></div><main><div class="wrap" id="home"></div><div class="wrap" id="list" hidden></div><div class="wrap" id="xlist" hidden></div></main>
 
 <footer class="dock"><div class="wrap" style="flex-direction:column;align-items:stretch;gap:6px">
   <div style="display:flex;gap:8px">
@@ -294,7 +307,7 @@ function render(){
     list.appendChild(d);
   });
   const rules=document.createElement("div");rules.className="sec rules";
-  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 2.4 · le ZIP final (CodeIG_auditPVCI_date.zip) contient le PVCI Excel rempli, le récap CSV et un dossier Photos.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
+  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 2.5 · le ZIP final (CodeIG_auditPVCI_date.zip) contient le PVCI Excel rempli, le récap CSV et un dossier Photos.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
   list.appendChild(rules);
   stats();
 }
@@ -652,6 +665,20 @@ function setView(v,initial){
   stats();xStats();
   window.scrollTo(0,scrollPos[v]||0);
 }
+
+// ---------- En-tête qui se réduit au défilement (téléphone) ----------
+const hdr=document.querySelector("header.top"),hsp=$("#hspace");let compact=false,lastY=0,upAcc=0;
+function fitSpace(){if(!compact)hsp.style.height=hdr.offsetHeight+"px"}
+try{new ResizeObserver(fitSpace).observe(hdr)}catch(e){window.addEventListener("resize",fitSpace)}
+function setCompact(on){if(on===compact)return;compact=on;hdr.classList.toggle("compact",on);$("#igmini").textContent=state.ig?"· "+state.ig:"";if(!on)fitSpace()}
+const small=()=>window.matchMedia("(max-width: 820px)").matches;
+window.addEventListener("scroll",()=>{
+  const y=window.scrollY,dy=y-lastY;lastY=y;
+  if(!small()||y<40){setCompact(false);upAcc=0;return}
+  if(dy>0){upAcc=0;if(y>90)setCompact(true)}
+  else{upAcc+=-dy;if(upAcc>28)setCompact(false)}
+},{passive:true});
+hdr.addEventListener("click",e=>{if(compact&&!e.target.closest("button,input")){setCompact(false);upAcc=0}});
 document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>setView(b.dataset.v));
 $("#goHome").onclick=()=>setView("home");
 
