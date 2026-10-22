@@ -158,7 +158,7 @@ details.spec div{font-size:12px;color:var(--muted);white-space:pre-line;padding-
 <body>
 
 <header class="top"><div class="wrap">
-  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></button><h1>PVCI NEMROD <small class="ver">v2.1</small></h1></div><span class="count" id="count"></span></div>
+  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></button><h1>PVCI NEMROD <small class="ver">v2.2</small></h1></div><span class="count" id="count"></span></div>
   <div class="igrow"><label for="ig">Code IG</label><input id="ig" placeholder="ex. 33318001" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
   <div class="nav" id="nav"><button data-v="photos" aria-current="false">Photos<span class="n" id="navP"></span></button><button data-v="excel" aria-current="false">Excel<span class="n" id="navX"></span></button></div>
   <div class="bar" aria-hidden="true"><i id="prog"></i></div>
@@ -287,7 +287,7 @@ function render(){
     list.appendChild(d);
   });
   const rules=document.createElement("div");rules.className="sec rules";
-  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 2.1 · le ZIP final contient les photos, le récap CSV et le PVCI Excel rempli.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
+  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 2.2 · le ZIP final (CodeIG_auditPVCI_date.zip) contient le PVCI Excel rempli, le récap CSV et un dossier Photos.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
   list.appendChild(rules);
   stats();
 }
@@ -421,7 +421,7 @@ async function buildExportZip(){
   const groups=[...SECTIONS.map(([s,a])=>[s,a.map(x=>x[0])]),["Photos libres",state.extra]];
   groups.forEach(([s,codes])=>codes.forEach(c=>{
     const ps=itemPhotos(c);const names=ps.map((p,i)=>fileName(c,i,ps.length));
-    ps.forEach((p,i)=>zip.file(names[i],p.blob,{date:new Date(p.ts)}));
+    ps.forEach((p,i)=>zip.file("Photos/"+names[i],p.blob,{date:new Date(p.ts)}));
     rows.push([s,(ITEMS[c]||{l:c}).l,state.st[c]||"",ps.length,names.join(" | "),state.cm[c]||""]);
   }));
   zip.file(`${state.ig}_recap_photos.csv`,"﻿"+rows.map(r=>r.map(csvCell).join(";")).join("\r\n"));
@@ -437,7 +437,7 @@ $("#send").onclick=async()=>{
     b.disabled=true;msg("Préparation de l'envoi…");
     try{
       const blob=await buildExportZip();
-      const file=new File([blob],`${state.ig}_photos_audit_${today()}.zip`,{type:"application/zip"});
+      const file=new File([blob],`${state.ig}_auditPVCI_${today()}.zip`,{type:"application/zip"});
       prepared={file,count:photos.length};
       const mb_=blob.size/1048576,mo=mb_<10?mb_.toFixed(1).replace(".",","):mb_.toFixed(0);
       b.textContent=`Envoyer (${mo} Mo)`;
@@ -482,7 +482,7 @@ $("#exp").onclick=async()=>{
     const groups=[...SECTIONS.map(([s,a])=>[s,a.map(x=>x[0])]),["Photos libres",state.extra]];
     groups.forEach(([s,codes])=>codes.forEach(c=>{
       const ps=itemPhotos(c);const names=ps.map((p,i)=>fileName(c,i,ps.length));
-      ps.forEach((p,i)=>zip.file(names[i],p.blob,{date:new Date(p.ts)}));
+      ps.forEach((p,i)=>zip.file("Photos/"+names[i],p.blob,{date:new Date(p.ts)}));
       rows.push([s,(ITEMS[c]||{l:c}).l,state.st[c]||"",ps.length,names.join(" | "),state.cm[c]||""]);
     }));
     zip.file(`${state.ig}_recap_photos.csv`,"﻿"+rows.map(r=>r.map(csvCell).join(";")).join("\r\n"));
@@ -490,7 +490,7 @@ $("#exp").onclick=async()=>{
     const blob=await zip.generateAsync({type:"blob",compression:"STORE"});
     const dl=DL;
     if(!dl){msg("Téléchargement indisponible.");return}
-    await dl.save({filename:`${state.ig}_photos_audit_${today()}.zip`,data:blob});
+    await dl.save({filename:`${state.ig}_auditPVCI_${today()}.zip`,data:blob});
     msg(`ZIP enregistré : ${photos.length} photos + récap CSV + PVCI Excel.`);
   }catch(e){msg(e&&e.code==="declined"?"Export annulé.":"Export impossible ("+((e&&e.code)||"erreur")+"). Réessaie.")}
   finally{btn.disabled=false}
@@ -501,7 +501,8 @@ $("#reset").onclick=async()=>{
   if(!armed){armed=true;$("#reset").textContent="Confirmer ?";msg("Toutes les photos, statuts et saisies Excel seront effacés. Appuie encore pour confirmer.");setTimeout(()=>{armed=false;$("#reset").textContent="Nouvel audit"},4000);return}
   armed=false;$("#reset").textContent="Nouvel audit";
   photos=[];urls.forEach(u=>URL.revokeObjectURL(u));urls.clear();await idb("readwrite",s=>s.clear());
-  state={ig:"",st:{},cm:{},extra:[],saveEach:false,v3:1,xl:{},view:view};lsSet();$("#ig").value="";msg("Audit réinitialisé : photos et saisie Excel effacées.");render();renderX();renderHome();
+  const keepXl={};XF.filter(f=>/signataire MOE/.test(f.label)).forEach(f=>{const r=xget(f.id);if(String(r.v||"").trim())keepXl[f.id]={v:r.v}});
+  state={ig:"",st:{},cm:{},extra:[],saveEach:false,v3:1,xl:keepXl,view:view};lsSet();$("#ig").value="";msg("Audit réinitialisé : photos et saisie Excel effacées.");render();renderX();renderHome();
 };
 
 // ================= EXCEL PVCI =================
@@ -660,13 +661,17 @@ async function unzip(u8){
   return out;
 }
 const colN=c=>c.split("").reduce((a,ch)=>a*26+ch.charCodeAt(0)-64,0);
-function setCell(doc,ref,val){
+function getCell(doc,ref){
   const NS=doc.documentElement.namespaceURI,sd=doc.getElementsByTagNameNS(NS,"sheetData")[0];
   const rn=+ref.match(/\d+/)[0],cn=colN(ref.match(/[A-Z]+/)[0]);
   let row=[...sd.getElementsByTagNameNS(NS,"row")].find(r=>+r.getAttribute("r")===rn);
   if(!row){row=doc.createElementNS(NS,"row");row.setAttribute("r",rn);const nx=[...sd.getElementsByTagNameNS(NS,"row")].find(r=>+r.getAttribute("r")>rn);sd.insertBefore(row,nx||null)}
   let c=[...row.getElementsByTagNameNS(NS,"c")].find(x=>x.getAttribute("r")===ref);
   if(!c){c=doc.createElementNS(NS,"c");c.setAttribute("r",ref);const nx=[...row.getElementsByTagNameNS(NS,"c")].find(x=>colN(x.getAttribute("r").match(/[A-Z]+/)[0])>cn);row.insertBefore(c,nx||null)}
+  return c;
+}
+function setCell(doc,ref,val){
+  const NS=doc.documentElement.namespaceURI,c=getCell(doc,ref);
   while(c.firstChild)c.removeChild(c.firstChild);c.removeAttribute("t");
   if(typeof val==="number"){const v=doc.createElementNS(NS,"v");v.textContent=String(val);c.appendChild(v)}
   else{c.setAttribute("t","inlineStr");const is=doc.createElementNS(NS,"is"),t=doc.createElementNS(NS,"t");t.setAttributeNS("http://www.w3.org/XML/1998/namespace","xml:space","preserve");t.textContent=val;is.appendChild(t);c.appendChild(is)}
@@ -676,11 +681,15 @@ async function buildPvciXlsx(){
   const files=await unzip(b64u8(TPL_B64));const dec=new TextDecoder(),enc=new TextEncoder();
   const docs={};const P=new DOMParser();
   const doc=path=>{if(!docs[path]){const f=files.find(x=>x.name===path);docs[path]=P.parseFromString(dec.decode(f.data),"application/xml")}return docs[path]};
-  const W={};
+  const W={},NFO={};
   PVCI.tabs.forEach((t,ti)=>{const d=doc(t.path);const w=W[t.name]={D:new Set(),NC:new Set()};XF.filter(x=>x.ti===ti).forEach(f=>{
     const r=xget(f.id),k=kind(f);let v=xVal(f);
     if(t.status){
-      if(String(v).trim()){const n=num(v);const isDateFmt=(f.nf>=14&&f.nf<=22)||(f.nf>=164&&false);let out;const dm=String(v).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(isDateFmt&&(dm||(k==="date"&&r.p))){const [Y,M,D]=dm?[+dm[3],+dm[2],+dm[1]]:r.p.split("-").map(Number);out=Math.round((Date.UTC(Y,M-1,D)-Date.UTC(1899,11,30))/86400000)}else out=(k==="int"||k==="num"||k==="alt"||k==="gps")&&n!=null&&/^-?[\d\s.,]+$/.test(String(v).trim())?n:String(v);setCell(d,"D"+f.row,out);w.D.add(f.row)}
+      if(String(v).trim()){const n=num(v);const isDateFmt=(f.nf>=14&&f.nf<=22)||(f.nf>=164&&false);let out;const dm=String(v).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(isDateFmt&&(dm||(k==="date"&&r.p))){const [Y,M,D]=dm?[+dm[3],+dm[2],+dm[1]]:r.p.split("-").map(Number);out=Math.round((Date.UTC(Y,M-1,D)-Date.UTC(1899,11,30))/86400000)}else out=(k==="int"||k==="num"||k==="alt"||k==="gps")&&n!=null&&/^-?[\d\s.,]+$/.test(String(v).trim())?n:String(v);const sv=String(v).trim();
+        if(k==="cp"&&/^\d{5}$/.test(sv)){out=+sv;NFO[t.path+"!D"+f.row]=165}
+        if(k==="ig"&&/^[1-9]\d{0,14}$/.test(sv))out=+sv;
+        if(k==="gps")NFO[t.path+"!D"+f.row]=164;
+        setCell(d,"D"+f.row,out);w.D.add(f.row)}
       if(r.st){setCell(d,"F"+f.row,r.st);if(r.st==="Non conforme")w.NC.add(f.row)}
       const cm=String(r.cm||"").trim();if(cm)setCell(d,"G"+f.row,f.note?f.note+"\n"+cm:cm);
     }else if(String(v).trim())setCell(d,f.cell,String(v));
@@ -695,6 +704,22 @@ async function buildPvciXlsx(){
       if((m=ft.match(/^COUNTA\('?(.+?)'?!D(\d+):D(\d+)\)$/))){const w=W[m[1]];if(w)val=[...w.D].filter(r=>r>=+m[2]&&r<=+m[3]).length}
       else if((m=ft.match(/^COUNTIF\('?(.+?)'?!F(\d+):F(\d+),"Non conforme"\)$/))){const w=W[m[1]];if(w)val=[...w.NC].filter(r=>r>=+m[2]&&r<=+m[3]).length}
       if(val==null)return;c.removeAttribute("t");let v=c.getElementsByTagNameNS(NS,"v")[0];if(!v){v=sd.createElementNS(NS,"v");c.appendChild(v)}v.textContent=String(val)})}
+  // mise en forme : texte centré + renvoyé à la ligne dans toutes les cases de saisie, 6 décimales pour le GPS, 5 chiffres pour le code postal
+  const st=doc("xl/styles.xml"),SNS=st.documentElement.namespaceURI,cellXfs=st.getElementsByTagNameNS(SNS,"cellXfs")[0];
+  let nfs=st.getElementsByTagNameNS(SNS,"numFmts")[0];
+  if(!nfs){nfs=st.createElementNS(SNS,"numFmts");st.documentElement.insertBefore(nfs,st.documentElement.firstElementChild)}
+  [[164,"0.000000"],[165,"00000"]].forEach(([id,code])=>{const n=st.createElementNS(SNS,"numFmt");n.setAttribute("numFmtId",id);n.setAttribute("formatCode",code);nfs.appendChild(n)});
+  nfs.setAttribute("count",nfs.getElementsByTagNameNS(SNS,"numFmt").length);
+  const xfList=()=>[...cellXfs.children].filter(e=>e.localName==="xf");const SC={};
+  function styleFor(old,nf){const key=old+"|"+(nf||"");if(SC[key]!=null)return SC[key];
+    const base=xfList()[+old]||xfList()[0];const x=base.cloneNode(true);
+    let al=[...x.children].find(e=>e.localName==="alignment");if(!al){al=st.createElementNS(SNS,"alignment");x.insertBefore(al,x.firstChild)}
+    al.setAttribute("horizontal","center");al.setAttribute("vertical","center");al.setAttribute("wrapText","1");x.setAttribute("applyAlignment","1");
+    if(nf){x.setAttribute("numFmtId",nf);x.setAttribute("applyNumberFormat","1")}
+    cellXfs.appendChild(x);const idx=xfList().length-1;cellXfs.setAttribute("count",idx+1);return SC[key]=idx}
+  function restyle(path,ref){const d=doc(path),c=getCell(d,ref);c.setAttribute("s",styleFor(c.getAttribute("s")||"0",NFO[path+"!"+ref]))}
+  PVCI.tabs.forEach(t=>t.fields.forEach(f=>{if(t.status)["D","F","G"].forEach(col=>restyle(t.path,col+f.row));else restyle(t.path,f.cell)}));
+  PVCI.photoRows.forEach(pr=>["B","C","D","F"].forEach(col=>restyle(PVCI.photoSheet,col+pr.row)));
   const S=new XMLSerializer();
   files.forEach(f=>{
     if(docs[f.name])f.data=enc.encode(S.serializeToString(docs[f.name]));
