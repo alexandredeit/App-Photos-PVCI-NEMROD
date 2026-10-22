@@ -153,12 +153,16 @@ details.spec summary{font:600 12px var(--f-body);color:var(--accent);cursor:poin
 details.spec div{font-size:12px;color:var(--muted);white-space:pre-line;padding-top:4px}
 .linkbtn{background:none;border:0;color:var(--accent);font:600 13px var(--f-body);padding:0;cursor:pointer;align-self:flex-start}
 .tog.xexp{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.imp{background:var(--surface);border:2px solid var(--accent);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.imp b{font-family:var(--f-display);font-size:18px;letter-spacing:.04em;text-transform:uppercase}
+.imp p{margin:0;font-size:14px;color:var(--muted)}
+.imp .row{display:flex;gap:8px;flex-wrap:wrap}
 </style>
 </head>
 <body>
 
 <header class="top"><div class="wrap">
-  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></button><h1>PVCI NEMROD <small class="ver">v2.2</small></h1></div><span class="count" id="count"></span></div>
+  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></button><h1>PVCI NEMROD <small class="ver">v2.3</small></h1></div><span class="count" id="count"></span></div>
   <div class="igrow"><label for="ig">Code IG</label><input id="ig" placeholder="ex. 33318001" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
   <div class="nav" id="nav"><button data-v="photos" aria-current="false">Photos<span class="n" id="navP"></span></button><button data-v="excel" aria-current="false">Excel<span class="n" id="navX"></span></button></div>
   <div class="bar" aria-hidden="true"><i id="prog"></i></div>
@@ -169,6 +173,7 @@ details.spec div{font-size:12px;color:var(--muted);white-space:pre-line;padding-
     <button class="tog miss" id="fMissing" hidden>Enregistrer les manquantes</button>
     <button class="tog galbtn" id="fGallery" hidden>Vers la galerie</button>
     <button class="tog xexp" id="xExp" hidden>Exporter l'Excel</button>
+    <button class="tog" id="xImp" hidden>Importer (Excel ou ZIP)</button>
     <button class="tog" id="install" hidden>Installer l'appli</button>
   </div>
 </div></header>
@@ -287,7 +292,7 @@ function render(){
     list.appendChild(d);
   });
   const rules=document.createElement("div");rules.className="sec rules";
-  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 2.2 · le ZIP final (CodeIG_auditPVCI_date.zip) contient le PVCI Excel rempli, le récap CSV et un dossier Photos.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
+  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 2.3 · le ZIP final (CodeIG_auditPVCI_date.zip) contient le PVCI Excel rempli, le récap CSV et un dossier Photos.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
   list.appendChild(rules);
   stats();
 }
@@ -546,6 +551,7 @@ function renderXItem(f){
   else if(k==="num")inp=`<div class="xrow">${xIn(`data-k="v" inputmode="decimal" value="${esc(r.v||"")}"`)}<span class="u">${esc(f.fmt)}</span></div>`;
   else if(k==="cp")inp=xIn(`data-k="v" inputmode="numeric" maxlength="5" value="${esc(r.v||"")}"`);
   else if(k==="date")inp=`<div class="xrow">${xIn(`data-k="d" type="date" value="${esc(r.p||"")}"`)}<button class="tog" data-a="today">Aujourd'hui</button></div>`;
+  else if((k==="dim3"||k==="dim2")&&r.v&&!r.p)inp=xIn(`data-k="v" value="${esc(r.v)}"`);
   else if(k==="dim3"){const p=r.p||[];inp=`<div class="xrow">${["L","l","h"].map((n,i)=>xIn(`class="xin mini" data-k="p${i}" inputmode="decimal" placeholder="${n}" value="${esc(p[i]||"")}"`)).join('<span class="x">×</span>')}<span class="u">m</span></div>`}
   else if(k==="dim2"){const p=r.p||[];inp=`<div class="xrow">${["L","l"].map((n,i)=>xIn(`class="xin mini" data-k="p${i}" inputmode="decimal" placeholder="${n}" value="${esc(p[i]||"")}"`)).join('<span class="x">×</span>')}<span class="u">m</span><span class="u" data-area>${esc(r.area||"")}</span></div>`}
   else if(k==="gps"||k==="alt")inp=`<div class="xrow">${xIn(`data-k="v" inputmode="decimal" value="${esc(r.v||"")}" placeholder="${k==="alt"?"m":"ex. 44,8378"}"`)}<button class="tog" data-a="gps">Position GPS</button></div>`;
@@ -614,7 +620,7 @@ function renderX(){
     list.appendChild(d);
   });
   const h=document.createElement("div");h.className="sec rules";
-  h.innerHTML=`<div>Chaque ligne reprend le PVCI Excel : valeur, statut (Conforme / Non conforme / Sans objet) et commentaire. Une ligne est faite dès qu'elle a un statut.</div><div>« Exporter l'Excel » sort le fichier PVCI au format TDF, rempli. Il est aussi inclus dans « Exporter le ZIP » et « Envoyer », avec les statuts de la Liste photos.</div><div>Tout est enregistré sur le téléphone au fil de la saisie : tu peux passer aux photos et revenir à tout moment.</div>`;
+  h.innerHTML=`<div>Chaque ligne reprend le PVCI Excel : valeur, statut (Conforme / Non conforme / Sans objet) et commentaire. Une ligne est faite dès qu'elle a un statut.</div><div>« Exporter l'Excel » sort le fichier PVCI au format TDF, rempli. Il est aussi inclus dans « Exporter le ZIP » et « Envoyer », avec les statuts de la Liste photos.</div><div>Tout est enregistré sur le téléphone au fil de la saisie : tu peux passer aux photos et revenir à tout moment.</div><div>« Importer un Excel » reprend un PVCI commencé à la main (valeurs, statuts, commentaires, statuts de la Liste photos) : tu continues ensuite dans l'appli.</div>`;
   list.appendChild(h);
   xStats();
 }
@@ -628,6 +634,7 @@ function renderHome(){
   <button class="tile" data-v="excel"><h2>${grid}Excel PVCI</h2><p>Saisie du procès-verbal sur site, ligne par ligne. Export au format Excel TDF.</p>
     <span class="tstat">${xd}/${XF.length} champs · ${nc} non conforme${nc>1?"s":""}</span><div class="bar"><i style="width:${xd/XF.length*100}%"></i></div><span class="go">Ouvrir</span></button>
   </div>
+  <button class="btn ghost" data-imp style="width:100%">Reprendre un audit (ZIP ou Excel)</button>
   <p class="hint">Les deux avancent en parallèle : passe des photos à l'Excel à tout moment avec les onglets en haut, rien n'est perdu. « Nouvel audit » efface les deux.</p>`;
   $("#home").querySelectorAll(".tile").forEach(t=>t.onclick=()=>setView(t.dataset.v));
   xStats();
@@ -638,7 +645,7 @@ function setView(v,initial){
   view=v;state.view=v;lsSet();
   $("#home").hidden=v!=="home";$("#list").hidden=v!=="photos";$("#xlist").hidden=v!=="excel";
   document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===v));
-  $("#fTodo").hidden=v==="home";$("#fOpen").hidden=v==="home";$("#xExp").hidden=v!=="excel";
+  $("#fTodo").hidden=v==="home";$("#fOpen").hidden=v==="home";$("#xExp").hidden=v!=="excel";$("#xImp").hidden=v!=="excel";
   if(v==="home")renderHome();
   stats();xStats();
   window.scrollTo(0,scrollPos[v]||0);
@@ -728,6 +735,113 @@ async function buildPvciXlsx(){
   const z=new JSZip();files.forEach(f=>z.file(f.name,f.data));
   return new Blob([await z.generateAsync()],{type:XLSX_MIME});
 }
+
+// ---------- Import d'un PVCI commencé à la main ----------
+const xfile=document.createElement("input");xfile.type="file";xfile.accept=".xlsx,.zip,application/zip,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";xfile.hidden=true;document.body.appendChild(xfile);
+$("#xImp").onclick=()=>{xfile.value="";xfile.click()};
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-imp]");if(b){xfile.value="";xfile.click()}});
+const normL=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[’']/g,"'").replace(/\s+/g," ").trim().toLowerCase();
+async function readXlsx(u8){
+  const files=await unzip(u8);const dec=new TextDecoder(),P=new DOMParser();
+  const get=n=>{const f=files.find(x=>x.name===n);return f?P.parseFromString(dec.decode(f.data),"application/xml"):null};
+  const wb=get("xl/workbook.xml"),rels=get("xl/_rels/workbook.xml.rels");if(!wb||!rels)throw new Error("ce n'est pas un fichier Excel valide");
+  const RNS="http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+  const tgt={};[...rels.getElementsByTagName("Relationship")].forEach(r=>{let t=r.getAttribute("Target");t=t.startsWith("/")?t.slice(1):"xl/"+t;tgt[r.getAttribute("Id")]=t});
+  const sheets={};[...wb.getElementsByTagName("sheet")].forEach(s=>{sheets[s.getAttribute("name")]=tgt[s.getAttributeNS(RNS,"id")||s.getAttribute("r:id")]});
+  const ssd=get("xl/sharedStrings.xml");const SS=ssd?[...ssd.getElementsByTagName("si")].map(si=>[...si.getElementsByTagName("t")].map(t=>t.textContent).join("")):[];
+  const cache={};
+  return {has:n=>!!sheets[n],cells:n=>{if(cache[n])return cache[n];const d=get(sheets[n]);const out={};if(!d)return out;
+    [...d.getElementsByTagName("c")].forEach(c=>{const t=c.getAttribute("t"),v=c.getElementsByTagName("v")[0];let val=null;
+      if(t==="s")val=v?SS[+v.textContent]:null;else if(t==="inlineStr")val=[...c.getElementsByTagName("t")].map(x=>x.textContent).join("");
+      else if(t==="str"||t==="b"||t==="e")val=v?v.textContent:null;else if(v)val=+v.textContent;
+      if(val!==null&&val!=="")out[c.getAttribute("r")]=val});
+    return cache[n]=out}};
+}
+const serial2iso=n=>{const d=new Date(Date.UTC(1899,11,30)+Math.round(n)*86400000);return d.toISOString().slice(0,10)};
+function parseImport(X){
+  const res={xl:{},st:{},cm:{},ig:null,count:0,skipped:[]};
+  PVCI.tabs.forEach(t=>{
+    if(!X.has(t.name)){res.skipped.push(`onglet « ${t.name} » absent`);return}
+    const C=X.cells(t.name);
+    XF.filter(f=>f.tab===t.name).forEach(f=>{
+      if(t.status&&normL(C["C"+f.row])!==normL(f.label)){res.skipped.push(`${t.name} ligne ${f.row}`);return}
+      const k=kind(f),rec={};let raw=t.status?C["D"+f.row]:C[f.cell];
+      if(raw!=null){
+        if(typeof raw==="number"){
+          if(k==="date"||(f.nf>=14&&f.nf<=22)){const iso=serial2iso(raw);if(k==="date")rec.p=iso;rec.v=iso.split("-").reverse().join("/")}
+          else if(k==="cp")rec.v=String(raw).padStart(5,"0");
+          else rec.v=fr(Math.round(raw*1e6)/1e6);
+        }else{rec.v=String(raw).trim();
+          if(k==="date"){const m=rec.v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);if(m)rec.p=`${m[3]}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`}}
+        if((k==="dim3"||k==="dim2")&&rec.v){const nums=(rec.v.split("/")[0].match(/-?\d+(?:[.,]\d+)?/g)||[]);const n=k==="dim3"?3:2;
+          if(nums.length===n){rec.p=nums.map(x=>x.replace(".",","));if(k==="dim2"){const P=nums.map(num);const a=Math.round(P[0]*P[1]*100)/100;rec.area=`= ${fr(a)} m²`}}}
+        if(isIGField(f)){res.ig=String(rec.v).replace(/\s/g,"");delete rec.v}
+      }
+      if(t.status){const st=C["F"+f.row];if(["Conforme","Non conforme","Sans objet"].includes(st))rec.st=st;
+        let cm=C["G"+f.row];if(cm!=null){cm=String(cm);if(f.note&&cm.startsWith(f.note))cm=cm.slice(f.note.length).replace(/^\s*\n?/,"");cm=cm.trim();if(cm)rec.cm=cm}}
+      if(Object.keys(rec).length){res.xl[f.id]=rec;res.count++}
+    });
+  });
+  if(X.has("Liste photos")){const C=X.cells("Liste photos"),codes=Object.keys(ITEMS);
+    PVCI.photoRows.forEach((pr,i)=>{const c=codes[i];if(!c)return;
+      if(normL(C["A"+pr.row])!==normL(pr.label)){res.skipped.push(`Liste photos ligne ${pr.row}`);return}
+      const st=C["B"+pr.row]?"SO":C["C"+pr.row]?"OK":C["D"+pr.row]?"NOK":"";if(st){res.st[c]=st;res.count++}
+      let cm=C["F"+pr.row];if(cm!=null){cm=String(cm);if(pr.fnote&&cm.startsWith(pr.fnote))cm=cm.slice(pr.fnote.length);cm=cm.trim();if(cm)res.cm[c]=cm}})}
+  return res;
+}
+let pendingImport=null;
+xfile.onchange=async()=>{
+  const f=xfile.files[0];if(!f)return;msg("Lecture de "+f.name+"…");
+  try{
+    if(typeof DecompressionStream==="undefined")throw new Error("import non pris en charge par ce navigateur (mets à jour le téléphone)");
+    const u8=new Uint8Array(await f.arrayBuffer());let res,ph=[];
+    if(/\.zip$/i.test(f.name)){
+      const ents=await unzip(u8);const xe=ents.find(e=>/\.xlsx$/i.test(e.name)&&!/(^|\/)\._/.test(e.name));
+      res=xe?parseImport(await readXlsx(xe.data)):{xl:{},st:{},cm:{},ig:null,count:0,skipped:[]};
+      ents.filter(e=>/\.jpe?g$/i.test(e.name)&&!/(^|\/)\._/.test(e.name)).forEach((e,i)=>{
+        const base=e.name.split("/").pop().replace(/\.jpe?g$/i,"");const m=base.match(/^([A-Za-z0-9-]+?)_(.+)$/);if(!m)return;
+        if(!res.ig)res.ig=m[1];let code=m[2].replace(/_GEN$/,"");const n=code.match(/_(\d+)$/);let idx=1;
+        if(n&&!ITEMS[code]){idx=+n[1];code=code.replace(/_\d+$/,"")}
+        ph.push({code,idx,name:base+".jpg",blob:new Blob([e.data],{type:"image/jpeg"})})});
+      res.photos=ph;res.count+=ph.length;
+    }else res=parseImport(await readXlsx(u8));
+    if(!res.count&&!res.ig){msg("Aucune donnée trouvée dans ce fichier. Vérifie que c'est bien un PVCI NEMROD ou un ZIP exporté par l'appli.");return}
+    pendingImport=res;showImportPanel(f.name);
+  }catch(e){msg("Import impossible : "+(e&&e.message||"erreur")+".")}
+};
+function showImportPanel(name){
+  if(view!=="excel")setView("excel");
+  const res=pendingImport,old=document.getElementById("impPanel");if(old)old.remove();
+  const hasData=xAny()||Object.keys(state.st).some(k=>state.st[k]);
+  const igNote=res.ig&&state.ig&&res.ig!==state.ig?`<p>Attention : le fichier est pour le site <b>${esc(res.ig)}</b>, l'appli est sur <b>${esc(state.ig)}</b>. Le code IG de l'appli ne sera pas changé.</p>`:"";
+  const el=document.createElement("div");el.className="imp";el.id="impPanel";
+  const np=(res.photos||[]).length;
+  el.innerHTML=`<b>Importer ${esc(name)}</b><p>${res.count-np} case${res.count-np>1?"s":""} remplie${res.count-np>1?"s":""}${np?` et ${np} photo${np>1?"s":""}`:""} trouvée${res.count>1?"s":""}${res.skipped.length?` · ${res.skipped.length} ligne(s) ignorée(s) car différentes du modèle`:""}.</p>${igNote}
+  ${hasData?`<p>L'appli contient déjà une saisie pour cet audit.</p>`:""}
+  <div class="row">${hasData?`<button class="btn send" data-m="fill">Compléter les cases vides</button><button class="btn main" data-m="replace">Tout remplacer</button>`:`<button class="btn send" data-m="replace">Importer</button>`}<button class="btn ghost" data-m="cancel">Annuler</button></div>`;
+  $("#xlist").prepend(el);window.scrollTo(0,0);
+  el.querySelectorAll("button").forEach(b=>b.onclick=()=>applyImport(b.dataset.m));
+}
+function applyImport(mode){
+  const res=pendingImport;const el=document.getElementById("impPanel");if(el)el.remove();pendingImport=null;
+  if(mode==="cancel"||!res){msg("Import annulé.");return}
+  if(mode==="replace"){const keep={};XF.filter(f=>/signataire MOE/.test(f.label)).forEach(f=>{if(xget(f.id).v)keep[f.id]={v:xget(f.id).v}});state.xl=Object.assign(keep,res.xl);
+    Object.keys(res.st).forEach(c=>state.st[c]=res.st[c]);Object.keys(res.cm).forEach(c=>state.cm[c]=res.cm[c])}
+  else{Object.entries(res.xl).forEach(([id,rec])=>{const cur=state.xl[id]||(state.xl[id]={});Object.entries(rec).forEach(([k,v])=>{if(cur[k]==null||cur[k]===""||(Array.isArray(cur[k])&&!cur[k].some(Boolean)))cur[k]=v})});
+    Object.keys(res.st).forEach(c=>{if(!state.st[c])state.st[c]=res.st[c]});Object.keys(res.cm).forEach(c=>{if(!state.cm[c])state.cm[c]=res.cm[c]})}
+  if(res.ig&&!state.ig){state.ig=res.ig;$("#ig").value=res.ig}
+  if(res.photos&&res.photos.length){
+    if(mode==="replace"){photos.forEach(p=>{if(urls.has(p.id)){URL.revokeObjectURL(urls.get(p.id));urls.delete(p.id)}});photos=[];idb("readwrite",s=>s.clear())}
+    const have=new Set(photos.map(p=>nameOf(p)));const t0=Date.now();
+    res.photos.sort((a,b)=>a.code.localeCompare(b.code)||a.idx-b.idx).forEach((q,i)=>{
+      if(have.has(q.name))return;
+      if(!ITEMS[q.code]&&!state.extra.includes(q.code))state.extra.push(q.code);
+      const p={id:t0+"-"+i+"-"+Math.random().toString(36).slice(2,6),item:q.code,blob:q.blob,ts:t0+i,saved:true};photos.push(p);idb("readwrite",s=>s.put(p));
+      if(!state.st[q.code])state.st[q.code]="OK"})}
+  lsSet();xSave();render();renderX();renderHome();setView("excel");
+  msg(`Import terminé : ${res.count} élément${res.count>1?"s":""} repris.`+(res.skipped.length?` Lignes ignorées : ${res.skipped.slice(0,3).join(", ")}${res.skipped.length>3?"…":""}.`:""));
+}
+
 function xlsxName(){return `${state.ig}_PVCI_${today()}.xlsx`}
 function xCsv(){const rows=[["Onglet","Rubrique","Champ","Valeur","Statut","Commentaire"]];XF.forEach(f=>{const r=xget(f.id);rows.push([f.tab,f.sub,f.label,xVal(f),r.st||"",r.cm||""])});return "﻿"+rows.map(r=>r.map(csvCell).join(";")).join("\r\n")}
 async function addPvci(zip){
