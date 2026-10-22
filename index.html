@@ -111,7 +111,7 @@ footer.dock .wrap{padding-block:10px;display:flex;gap:8px;align-items:center}
 <body>
 
 <header class="top"><div class="wrap">
-  <div class="brand"><h1>Photos PVCI NEMROD <small class="ver">v1.1</small></h1><span class="count" id="count">0 photo</span></div>
+  <div class="brand"><h1>Photos PVCI NEMROD <small class="ver">v1.2</small></h1><span class="count" id="count">0 photo</span></div>
   <div class="igrow"><label for="ig">Code IG</label><input id="ig" placeholder="ex. 33318001" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
   <div class="bar" aria-hidden="true"><i id="prog"></i></div>
   <div class="tools">
@@ -172,6 +172,7 @@ class JSZip{
     return new Blob([...parts,...central,end.buffer],{type:"application/zip"});
   }
 }
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 // Téléchargement direct (navigateur)
 function download(name,blob){const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=name;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}
 const DL={save:async({filename,data})=>{download(filename,data instanceof Blob?data:new Blob([data]));return{status:"saved"}}};
@@ -236,7 +237,7 @@ function render(){
     list.appendChild(d);
   });
   const rules=document.createElement("div");rules.className="sec rules";
-  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 1.1 · envoi du ZIP final par mail avec le bouton « Envoyer ».</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
+  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Version 1.2 · envoi du ZIP final par mail avec le bouton « Envoyer ».</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
   list.appendChild(rules);
   stats();
 }
@@ -383,7 +384,7 @@ $("#send").onclick=async()=>{
     b.disabled=true;msg("Préparation de l'envoi…");
     try{
       const blob=await buildExportZip();
-      const file=new File([blob],`${state.ig}_photos_audit.zip`,{type:"application/zip"});
+      const file=new File([blob],`${state.ig}_photos_audit_${today()}.zip`,{type:"application/zip"});
       prepared={file,count:photos.length};
       const mb_=blob.size/1048576,mo=mb_<10?mb_.toFixed(1).replace(".",","):mb_.toFixed(0);
       b.textContent=`Envoyer (${mo} Mo)`;
@@ -435,7 +436,7 @@ $("#exp").onclick=async()=>{
     const blob=await zip.generateAsync({type:"blob",compression:"STORE"});
     const dl=DL;
     if(!dl){msg("Téléchargement indisponible.");return}
-    await dl.save({filename:`${state.ig}_photos_audit.zip`,data:blob});
+    await dl.save({filename:`${state.ig}_photos_audit_${today()}.zip`,data:blob});
     msg(`ZIP enregistré : ${photos.length} photos + récap CSV.`);
   }catch(e){msg(e&&e.code==="declined"?"Export annulé.":"Export impossible ("+((e&&e.code)||"erreur")+"). Réessaie.")}
   finally{btn.disabled=false}
