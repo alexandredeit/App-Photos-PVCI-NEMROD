@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>App Photos PVCI NEMROD</title>
+<meta name="theme-color" content="#0E56C9">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PVCI NEMROD">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+/* Layout: one-column field checklist, sticky site bar on top, sticky export bar at bottom */
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --fg:#16212C; --muted:#5B6875; --line:#D3DAE1;
+  --accent:#0E56C9; --accent-fg:#FFFFFF; --ok:#1E7F47; --nok:#C0352B; --so:#7A8592; --chip:#E3E8EE;
+  --f-display:"Roboto Condensed","Arial Narrow","Helvetica Neue",system-ui,sans-serif;
+  --f-body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F151B; --surface:#18212A; --fg:#E7ECF1; --muted:#97A3AF; --line:#2B3845;
+  --accent:#5B9BFF; --accent-fg:#0B1320; --ok:#4CC27F; --nok:#FF7A6E; --so:#8C98A4; --chip:#24303B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F151B; --surface:#18212A; --fg:#E7ECF1; --muted:#97A3AF; --line:#2B3845;
+  --accent:#5B9BFF; --accent-fg:#0B1320; --ok:#4CC27F; --nok:#FF7A6E; --so:#8C98A4; --chip:#24303B; color-scheme:dark}
+*{box-sizing:border-box}
+html{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+body{margin:0;font-size:14px}
+img{max-width:100%}
+[hidden]{display:none!important}
+button{-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.4}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+header.top .wrap{padding-block:12px;display:flex;flex-direction:column;gap:10px}
+.brand{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px}
+h1{font-family:var(--f-display);font-weight:700;font-size:24px;letter-spacing:.02em;margin:0;text-transform:uppercase}
+.count{font-family:var(--f-mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.igrow{display:flex;gap:8px;align-items:center}
+.igrow label{font-family:var(--f-display);font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+#ig{flex:1;min-width:0;font-family:var(--f-mono);font-size:17px;padding:10px 12px;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+#ig:focus{outline:none;border-color:var(--accent)}
+#ig.empty{border-color:var(--nok)}
+.bar{height:6px;background:var(--chip);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.tog{font:600 13px var(--f-body);padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
+.tog[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+main .wrap{padding-block:14px 120px;display:flex;flex-direction:column;gap:14px}
+details.sec{background:var(--surface);border:1px solid var(--line);border-radius:10px}
+details.sec>summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+details.sec>summary::-webkit-details-marker{display:none}
+.sec h2{font-family:var(--f-display);font-weight:700;font-size:19px;letter-spacing:.05em;text-transform:uppercase;margin:0}
+.sec .sc{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.sec[open]>summary{border-bottom:1px solid var(--line)}
+.item{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.item:last-child{border-bottom:0}
+.item.done{box-shadow:inset 4px 0 0 var(--ok)}
+.item.isso{box-shadow:inset 4px 0 0 var(--so);opacity:.7}
+.item.isnok{box-shadow:inset 4px 0 0 var(--nok)}
+.ihead{display:flex;gap:10px;align-items:flex-start}
+.ilabel{flex:1;min-width:0}
+.ilabel b{font-weight:600;display:block}
+.fname{font-family:var(--f-mono);font-size:12px;color:var(--muted);word-break:break-all}
+.shoot{flex:none;display:inline-flex;align-items:center;gap:6px;background:var(--accent);color:var(--accent-fg);border:0;border-radius:8px;padding:10px 14px;font:700 15px var(--f-display);letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+.shoot svg{width:18px;height:18px}
+.shoot:focus-visible,.tog:focus-visible,.st button:focus-visible,.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.row2{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.st{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.st button{border:0;background:transparent;color:var(--muted);font:600 13px var(--f-body);padding:6px 11px;cursor:pointer}
+.st button+button{border-left:1px solid var(--line)}
+.st button.on[data-v="SO"]{background:var(--so);color:var(--surface)}
+.st button.on[data-v="OK"]{background:var(--ok);color:var(--surface)}
+.st button.on[data-v="NOK"]{background:var(--nok);color:var(--surface)}
+.gal{link:0}
+.gallery{display:flex;gap:8px;flex-wrap:wrap}
+.ph{position:relative;width:76px}
+.ph img{width:76px;height:76px;object-fit:cover;border-radius:6px;display:block;background:var(--chip)}
+.ph .del{position:absolute;top:-6px;right:-6px;width:24px;height:24px;border-radius:50%;border:2px solid var(--surface);background:var(--fg);color:var(--bg);font-size:13px;line-height:18px;cursor:pointer;padding:0}
+.ph .sv{width:100%;margin-top:3px;padding:3px 0;font-size:11px}
+.ph .sv.ok{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.tog.miss{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.tog.miss.urgent{background:var(--nok);border-color:var(--nok);color:var(--surface)}
+.ph span{display:block;font:500 10px var(--f-mono);color:var(--muted);text-align:center;margin-top:2px}
+.cmt{width:100%;font:14px var(--f-body);padding:7px 9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)}
+.addlib{display:flex;gap:8px;padding:12px 14px;flex-wrap:wrap}
+.addlib input{flex:1;min-width:160px;font:14px var(--f-mono);padding:9px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg)}
+footer.dock{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+footer.dock .wrap{padding-block:10px;display:flex;gap:8px;align-items:center}
+.btn{font:700 16px var(--f-display);letter-spacing:.06em;text-transform:uppercase;padding:12px 16px;border-radius:8px;border:0;cursor:pointer}
+.btn.main{flex:1;background:var(--fg);color:var(--bg)}
+.btn.ghost{background:var(--chip);color:var(--fg)}
+.btn:disabled{opacity:.5;cursor:default}
+#msg{font-size:13px;color:var(--muted);min-height:1em}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px}
+.rules{font-size:13px;color:var(--muted);padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.rules code{font-family:var(--f-mono);color:var(--fg)}
+.busy{opacity:.6;pointer-events:none}
+@media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+.tog.galbtn{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+#install{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <div class="brand"><h1>Photos PVCI NEMROD</h1><span class="count" id="count">0 photo</span></div>
+  <div class="igrow"><label for="ig">Code IG</label><input id="ig" placeholder="ex. 33318001" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
+  <div class="bar" aria-hidden="true"><i id="prog"></i></div>
+  <div class="tools">
+    <button class="tog" id="fTodo" aria-pressed="false">À faire seulement</button>
+    <button class="tog" id="fOpen" aria-pressed="false">Tout déplier</button>
+    <button class="tog" id="fSave" aria-pressed="false">Copie photo par photo : désactivée</button>
+    <button class="tog miss" id="fMissing" hidden>Enregistrer les manquantes</button>
+    <button class="tog galbtn" id="fGallery" hidden>Vers la galerie</button>
+    <button class="tog" id="install" hidden>Installer l'appli</button>
+  </div>
+</div></header>
+
+<main><div class="wrap" id="list"></div></main>
+
+<footer class="dock"><div class="wrap" style="flex-direction:column;align-items:stretch;gap:6px">
+  <div style="display:flex;gap:8px">
+    <button class="btn main" id="exp">Exporter le ZIP</button>
+    <button class="btn ghost" id="reset">Nouvel audit</button>
+  </div>
+  <div id="msg" role="status"></div>
+</div></footer>
+
+<input type="file" id="cam" accept="image/*" capture="environment" hidden>
+<input type="file" id="gal" accept="image/*" multiple hidden>
+
+<script>
+// Mini ZIP (sans compression, format standard) : remplace JSZip pour fonctionner hors ligne
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(u8){let c=0xFFFFFFFF;for(let i=0;i<u8.length;i++)c=CRC_T[(c^u8[i])&0xFF]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
+function dosTime(d){return ((d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1))&0xFFFF}
+function dosDate(d){return (((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate())&0xFFFF}
+class JSZip{
+  constructor(){this.entries=[]}
+  file(name,data,opts){this.entries.push({name,data,date:(opts&&opts.date)||new Date()});return this}
+  async generateAsync(){
+    const enc=new TextEncoder();const parts=[];const central=[];let offset=0;
+    for(const e of this.entries){
+      const nameB=enc.encode(e.name);
+      const u8=typeof e.data==="string"?enc.encode(e.data):new Uint8Array(await e.data.arrayBuffer());
+      const crc=crc32(u8),t=dosTime(e.date),d=dosDate(e.date);
+      const lh=new DataView(new ArrayBuffer(30));
+      lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,0,true);
+      lh.setUint16(10,t,true);lh.setUint16(12,d,true);lh.setUint32(14,crc,true);lh.setUint32(18,u8.length,true);lh.setUint32(22,u8.length,true);
+      lh.setUint16(26,nameB.length,true);lh.setUint16(28,0,true);
+      parts.push(lh.buffer,nameB,u8);
+      const ch=new DataView(new ArrayBuffer(46));
+      ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(10,0,true);
+      ch.setUint16(12,t,true);ch.setUint16(14,d,true);ch.setUint32(16,crc,true);ch.setUint32(20,u8.length,true);ch.setUint32(24,u8.length,true);
+      ch.setUint16(28,nameB.length,true);ch.setUint32(42,offset,true);
+      central.push(ch.buffer,nameB);
+      offset+=30+nameB.length+u8.length;
+    }
+    const cdSize=central.reduce((a,b)=>a+(b.byteLength),0);
+    const end=new DataView(new ArrayBuffer(22));
+    end.setUint32(0,0x06054b50,true);end.setUint16(8,this.entries.length,true);end.setUint16(10,this.entries.length,true);
+    end.setUint32(12,cdSize,true);end.setUint32(16,offset,true);
+    return new Blob([...parts,...central,end.buffer],{type:"application/zip"});
+  }
+}
+// Téléchargement direct (navigateur)
+function download(name,blob){const u=URL.createObjectURL(blob);const a=document.createElement("a");a.href=u;a.download=name;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}
+const DL={save:async({filename,data})=>{download(filename,data instanceof Blob?data:new Blob([data]));return{status:"saved"}}};
+</script>
+<script>
+// Liste issue de l'onglet "Liste photos" du PVCI. c = nom de fichier, l = désignation du classeur, g = suffixe _GEN
+const SECTIONS=[
+["Accès",[["Acces_VueGenerale","Acces_VueGenerale (3 points de vue depuis la rue)",1],["Acces_BadgePrincipal"],["Acces_Cles","Acces_Clés"],["Acces_BoiteCles"],["Acces_Digicode"],["Acces_EntreeSite"],["Acces_TerrasseEchelle"],["Acces_CadenasEchelle"],["Acces_CadenasCode"],["Acces_Skydome"],["Acces_MaterielRadio"],["Acces_Aeriens"],["Acces_IdentificationBailleur","Acces_IdentificationBailleur (fiche en entrée immeuble)"]]],
+["Énergie Enedis",[["Alimentation_VueColonneMontante","Alimentation_Vue colonne montante"],["Alimentation_Disj_EDF"],["Alimentation_Calibrage_Disj_EDF"],["Alimentation_Compteur_EDF"],["Alimentation_Compteur_Num","Alimentation_Compteur_N°"],["Alimentation_Compteur_Puissance"],["Alimentation_Compteur_Tarif"]]],
+["TGBT TDF",[["Alimentation_VueGenerale_TGBT-TDF","Alimentation_Vue générale_TGBT-TDF"],["Alimentation_VueGenerale_TGBT-TDF_ouvert","Alimentation_Vue générale_TGBT-TDF_ouvert"],["Alimentation_Disj_TDF"],["Alimentation_Calibrage_Disj_TDF"],["Alimentation_Disj_Client"],["Alimentation_IOT"],["Alimentation_TGBT-TDF_Picto"],["Alimentation_TGBT-TDF_etiquettage_client"]]],
+["Installation opérateur",[["Aeriens_S1","Aeriens S1"],["Aeriens_S2","Aeriens S2"],["Aeriens_S3","Aeriens S3"],["Aeriens_RRU_S1","Aeriens_RRU S1"],["Aeriens_RRU_S2","Aeriens_RRU S2"],["Aeriens_RRU_S3","Aeriens_RRU S3"],["Detail_CheminCables"]]],
+["Sécurité",[["Securite_AntiIntrusion","Securite_Anti intrusion"],["Aeriens_Palier_Repos"],["Securite_PointAncrage"],["Securite_LigneDeVie"],["Securite_RailSoll"],["Balisage_Terrasse"],["Balisage_gardecorps_terrasse"],["Balisage_gardecorps_Skydome"],["Securite_SignaletiqueSoll"],["Securite_Signaletique"],["Emplacement_nacelle"],["Emplacement_grue"]]],
+["Mise à la terre",[["Terre_MiseALaTerreEquipements","Mise à la terre des équipements"],["Batiment_InterconnexionTerre","Bâtiment_InterconnexionTerre"],["Terre_PlaquePrincipale","Plaque de terre principale"],["Terre_BarretteCoupure","Barrette de coupure"],["Terre_Barrette","Barrette de terre"],["Foudre_InterconnexionTerre"],["Foudre_Paratonnerre"],["Etiquettage_Terre"]]],
+["Zone technique",[["ZoneTech_Eclairage"],["ZoneTech_SupportBaie"],["ZoneTech_VueGenerale"],["ZoneTech_Interrupteur"],["Support_MatAntenne_S1","Support_MâtAntenne_S1"],["Support_MatAntenne_S2","Support_MâtAntenne_S2"],["Support_MatAntenne_S3","Support_MâtAntenne_S3"],["Fausse_cheminee_Interieure_S1","Fausse_cheminée_Intérieure_S1"],["Fausse_cheminee_Exterieure_S1","Fausse_cheminée_Extérieure_S1"],["Fausse_cheminee_Interieure_S2","Fausse_cheminée_Intérieure_S2"],["Fausse_cheminee_Exterieure_S2","Fausse_cheminée_Extérieure_S2"],["Fausse_cheminee_Interieure_S3","Fausse_cheminée_Intérieure_S3"],["Fausse_cheminee_Exterieure_S3","Fausse_cheminée_Extérieure_S3"],["Support_FH1"],["Support_FH2"],["Crosse_Adduction","Crosse d'adduction"]]],
+["VMC",[["VMC_VueGenerale","Vue générale dans le local"],["VMC_Caisson","Caisson ou extracteur complet"],["VMC_PlaqueSignaletique","Plaque signalétique"],["VMC_Grilles","Grilles d'entrée et de rejet d'air"],["VMC_Gaines","Gaines, raccordements et fixations"],["VMC_CoffretCommande","Coffret de commande et voyants"],["VMC_Anomalies","Anomalies visibles : obstruction, encrassement, corrosion, condensation, gaine détériorée"]]],
+["Climatisation",[["Clim_VueGenerale","Vue générale dans le local"],["Clim_UniteInterieure","Unité intérieure complète"],["Clim_UniteExterieure","Unité extérieure complète"],["Clim_PlaquesSignaletiques","Plaques signalétiques des deux unités"],["Clim_Grilles","Grilles d'aspiration et de soufflage"],["Clim_LiaisonsFrigo","Liaisons frigorifiques et isolation"],["Clim_Condensats","Évacuation des condensats"],["Clim_Commande","Commande ou afficheur (température, défaut)"],["Clim_RaccordementElec","Raccordement électrique et sectionneur"],["Clim_Anomalies","Anomalies visibles : fuite, corrosion, encrassement, choc, dégagement"],["Clim_UnitesExterieures","Unités extérieures"]]],
+["Détection incendie",[["Incendie_VueGeneraleCentrale","Vue générale de la centrale"],["Incendie_FaceAvantCentrale","Face avant de la centrale"],["Incendie_PlaqueSignaletique","Plaque signalétique"],["Incendie_AfficheurVoyants","Afficheur et voyants, notamment les défauts"],["Incendie_EtiquetteMaintenance","Étiquette de dernière maintenance"],["Incendie_LocalisationDetecteur","Vue de localisation de chaque détecteur"],["Incendie_Detecteur","Gros plan de chaque détecteur et de son repère"],["Incendie_DeclencheurSirene","Déclencheur manuel et sirène"],["Incendie_Anomalies","Anomalies visibles : détecteur masqué, sale, détérioré, déposé"]]],
+["Télégestion",[["Telegestion_VueGenerale","Vue générale du coffret"],["Telegestion_Coffret","Coffret complet"],["Telegestion_Identification","Identification TDF, marque et modèle"],["Telegestion_EcranVoyants","Écran et voyants d'état"],["Telegestion_Alarmes","Alarmes actives affichées"],["Telegestion_Modem","Modem ou équipement de transmission"],["Telegestion_Alimentations","Alimentations principale et secourue"],["Telegestion_Raccordements","Raccordements clim, ventilation, incendie"],["Telegestion_Sondes","Sondes : température, eau, ouverture de porte"],["Telegestion_Anomalies","Anomalies visibles : défaut, câblage, corrosion, traces d'eau"]]],
+["Extincteur",[["Extincteur_VueEmplacement","Vue générale montrant son emplacement"],["Extincteur_Complet","Extincteur complet"],["Extincteur_Signaletique","Signalétique et accessibilité"],["Extincteur_EtiquetteMaintenance","Étiquette de maintenance avec date lisible"],["Extincteur_PlaqueFabricant","Plaque fabricant, type et capacité"],["Extincteur_Manometre","Manomètre"],["Extincteur_Goupille","Goupille et scellé"],["Extincteur_Flexible","Flexible, poignée et diffuseur"],["Extincteur_Cuve","Corps et fond de la cuve"],["Extincteur_Anomalies","Anomalies visibles : corrosion, choc, fuite, fixation, accès"]]],
+["Panoramique photos",[["Panoramique_360","Vue 360° depuis le point le plus dégagé"],["Emplacement_AutreOperateur","Emplacement disponible pour autre opérateur"]]],
+];
+const ITEMS={};SECTIONS.forEach(([s,arr])=>arr.forEach(a=>ITEMS[a[0]]={c:a[0],l:a[1]||a[0],g:!!a[2],sec:s}));
+
+const MAX_BYTES=2.8*1024*1024, MAX_SIDE=2560;
+const $=s=>document.querySelector(s);
+let state={ig:"",st:{},cm:{},extra:[],saveEach:false,v3:1};
+let photos=[]; // {id,item,blob,ts}
+const urls=new Map();
+let filterTodo=false;
+
+function lsGet(){try{const s=JSON.parse(localStorage.getItem("pvci_pwa_state")||"null");if(s)state=Object.assign(state,s)}catch(e){}}
+function lsSet(){try{localStorage.setItem("pvci_pwa_state",JSON.stringify(state))}catch(e){}}
+
+// IndexedDB pour garder les photos si l'onglet se ferme
+let dbp=null;
+function db(){if(dbp)return dbp;dbp=new Promise((res)=>{try{const r=indexedDB.open("pvci_pwa_photos",1);r.onupgradeneeded=()=>r.result.createObjectStore("p",{keyPath:"id"});r.onsuccess=()=>res(r.result);r.onerror=()=>res(null)}catch(e){res(null)}});return dbp}
+async function idb(mode,fn){const d=await db();if(!d)return null;return new Promise(res=>{try{const t=d.transaction("p",mode);const r=fn(t.objectStore("p"));t.oncomplete=()=>res(r&&r.result);t.onerror=()=>res(null)}catch(e){res(null)}})}
+
+function cleanIG(v){return v.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9-]/g,"").toUpperCase()}
+function cleanCode(v){return v.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^A-Za-z0-9_-]+/g,"_").replace(/^_+|_+$/g,"")}
+function itemPhotos(c){return photos.filter(p=>p.item===c).sort((a,b)=>a.ts-b.ts)}
+function fileName(c,idx,total){const it=ITEMS[c];const ig=state.ig||"IG";return `${ig}_${c}${idx>0?"_"+(idx+1):""}${it&&it.g?"_GEN":""}.jpg`}
+function nextName(c){const n=itemPhotos(c).length;return fileName(c,n,n+1)}
+
+function allCodes(){return [...Object.keys(ITEMS),...state.extra]}
+function render(){
+  const list=$("#list");const openSet=new Set([...list.querySelectorAll("details[open]")].map(d=>d.dataset.s));
+  const first=!list.children.length;
+  list.innerHTML="";
+  const groups=[...SECTIONS.map(([s,a])=>[s,a.map(x=>x[0])]),["Photos libres",state.extra]];
+  groups.forEach(([s,codes],gi)=>{
+    const d=document.createElement("details");d.className="sec";d.dataset.s=s;
+    if(openSet.has(s)||(first&&gi===0))d.open=true;
+    const done=codes.filter(isDone).length;
+    d.innerHTML=`<summary><h2>${s}</h2><span class="sc">${done}/${codes.length}</span></summary>`;
+    codes.forEach(c=>{if(filterTodo&&isDone(c))return;d.appendChild(renderItem(c))});
+    if(s==="Photos libres"){const a=document.createElement("div");a.className="addlib";
+      a.innerHTML=`<input id="libName" placeholder="Nom de la photo (ex. Fissure_Terrasse)"><button class="tog" id="libAdd">Ajouter la ligne</button>`;
+      d.appendChild(a);
+      a.querySelector("#libAdd").onclick=()=>{const v=cleanCode(a.querySelector("#libName").value);if(!v)return;if(!ITEMS[v]&&!state.extra.includes(v)){state.extra.push(v);lsSet()}d.open=true;render()};
+    }
+    list.appendChild(d);
+  });
+  const rules=document.createElement("div");rules.className="sec rules";
+  rules.innerHTML=`<div>Nommage : <code>CodeIG_Désignation.jpg</code>, vue d'ensemble : <code>CodeIG_Acces_VueGenerale_GEN.jpg</code>.</div><div>Plusieurs photos sur une ligne : la 1re garde le nom de base, les suivantes prennent <code>_2</code>, <code>_3</code>… pour éviter les doublons (sinon seule la plus récente est gardée).</div><div>JPEG, réduit automatiquement sous 3 Mo (photo d'origine conservée si déjà conforme).</div><div>Sauvegarde en cours de visite : « Vers la galerie » envoie toutes les nouvelles photos d'un coup (iPhone : « Enregistrer les images »), « Sauvegarder (1 ZIP) » les range dans Fichiers.</div><div>Installer l'appli : iPhone, Safari → Partager → « Sur l'écran d'accueil ». Android, Chrome → menu ⋮ → « Installer l'application ». Elle marche ensuite sans réseau.</div>`;
+  list.appendChild(rules);
+  stats();
+}
+function isDone(c){return itemPhotos(c).length>0||state.st[c]==="SO"}
+function renderItem(c){
+  const it=ITEMS[c]||{c,l:c,g:false};const ps=itemPhotos(c);const st=state.st[c]||"";
+  const el=document.createElement("div");
+  el.className="item"+(st==="SO"?" isso":st==="NOK"?" isnok":ps.length?" done":"");
+  const label=it.l!==c?`<b>${esc(it.l)}</b>`:`<b>${esc(c)}</b>`;
+  el.innerHTML=`<div class="ihead"><div class="ilabel">${label}<div class="fname">${esc(nextName(c))}</div></div>
+  <button class="shoot" data-a="cam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Photo</button></div>
+  <div class="row2"><div class="st">${["SO","OK","NOK"].map(v=>`<button data-v="${v}" class="${st===v?"on":""}">${v}</button>`).join("")}</div>
+  <button class="tog" data-a="gal">Depuis la galerie</button></div>
+  ${ps.length?`<div class="gallery">${ps.map((p,i)=>`<div class="ph"><img alt="" src="${url(p)}"><button class="del" data-id="${p.id}" aria-label="Supprimer">✕</button><span>${i>0?"_"+(i+1):"n°1"} · ${(p.blob.size/1048576).toFixed(1)} Mo</span><button class="tog sv${p.saved?" ok":""}" data-id="${p.id}">${p.saved?"✓ Sur le tél.":"Enregistrer"}</button></div>`).join("")}</div>`:""}
+  ${st==="NOK"||state.cm[c]?`<input class="cmt" placeholder="Commentaire" value="${esc(state.cm[c]||"")}">`:""}`;
+  el.querySelector('[data-a="cam"]').onclick=()=>pick("#cam",c);
+  el.querySelector('[data-a="gal"]').onclick=()=>pick("#gal",c);
+  el.querySelectorAll(".st button").forEach(b=>b.onclick=()=>{state.st[c]=state.st[c]===b.dataset.v?"":b.dataset.v;lsSet();render()});
+  el.querySelectorAll(".del").forEach(b=>b.onclick=()=>delPhoto(b.dataset.id));
+  el.querySelectorAll(".sv").forEach(b=>b.onclick=()=>{const p=photos.find(x=>x.id===b.dataset.id);if(p)saveOne(p)});
+  const cm=el.querySelector(".cmt");if(cm)cm.oninput=()=>{state.cm[c]=cm.value;lsSet()};
+  return el;
+}
+function esc(s){return String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
+function url(p){if(!urls.has(p.id))urls.set(p.id,URL.createObjectURL(p.blob));return urls.get(p.id)}
+function stats(){
+  const codes=allCodes();const done=codes.filter(isDone).length;
+  $("#prog").style.width=(codes.length?done/codes.length*100:0)+"%";
+  const nSaved=photos.filter(p=>p.saved).length, miss=photos.length-nSaved;
+  $("#count").textContent=`${photos.length} photo${photos.length>1?"s":""} · ${done}/${codes.length} lignes · ${nSaved} sur le tél.`;
+  const gb=$("#fGallery");gb.hidden=!miss||savingAll;gb.textContent=`Vers la galerie (${miss})`;
+  const mb=$("#fMissing");mb.hidden=!miss||savingAll;mb.textContent=`Sauvegarder ${miss} nouvelle${miss>1?"s":""} photo${miss>1?"s":""} (1 ZIP)`;mb.classList.toggle("urgent",miss>=15);
+  const fs=$("#fSave");fs.setAttribute("aria-pressed",state.saveEach===true);fs.textContent="Copie photo par photo : "+(state.saveEach===true?"activée":"désactivée");
+  $("#ig").classList.toggle("empty",!state.ig);
+}
+
+let target=null;
+function pick(sel,c){target=c;const i=$(sel);i.value="";i.click()}
+async function onFiles(e){
+  const files=[...e.target.files];if(!files.length||!target)return;const c=target;
+  msg(`Traitement de ${files.length} photo${files.length>1?"s":""}…`);
+  for(const f of files){
+    try{const blob=await toJpeg(f);const p={id:Date.now()+"-"+Math.random().toString(36).slice(2,7),item:c,blob,ts:Date.now()};
+      photos.push(p);await idb("readwrite",s=>s.put(p));
+      if(state.saveEach===true){render();await saveOne(p)}}
+    catch(err){msg("Impossible de lire "+f.name+". Essaie depuis la galerie.");continue}
+  }
+  if(state.st[c]===""||!state.st[c]){state.st[c]="OK";lsSet()}
+  if(state.saveEach!==true){const miss=photos.filter(p=>!p.saved).length;msg(`Ajoutée : ${fileName(c,itemPhotos(c).length-1,itemPhotos(c).length)}`+(miss>=15?` · ${miss} photos non sauvegardées, pense à faire une sauvegarde.`:""))}
+  render();
+}
+$("#cam").onchange=onFiles;$("#gal").onchange=onFiles;
+
+async function toJpeg(f){
+  if((f.type==="image/jpeg"||/\.jpe?g$/i.test(f.name))&&f.size<=MAX_BYTES)return f.slice(0,f.size,"image/jpeg");
+  let bmp;
+  try{bmp=await createImageBitmap(f,{imageOrientation:"from-image"})}
+  catch(e){bmp=await new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=URL.createObjectURL(f)})}
+  const w=bmp.width,h=bmp.height;let scale=Math.min(1,MAX_SIDE/Math.max(w,h));
+  for(let attempt=0;attempt<6;attempt++){
+    const cv=document.createElement("canvas");cv.width=Math.round(w*scale);cv.height=Math.round(h*scale);
+    cv.getContext("2d").drawImage(bmp,0,0,cv.width,cv.height);
+    for(const q of [0.88,0.8,0.72]){
+      const b=await new Promise(r=>cv.toBlob(r,"image/jpeg",q));
+      if(b&&b.size<=MAX_BYTES)return b;
+    }
+    scale*=0.8;
+  }
+  throw new Error("trop lourde");
+}
+async function delPhoto(id){
+  photos=photos.filter(p=>p.id!==id);if(urls.has(id)){URL.revokeObjectURL(urls.get(id));urls.delete(id)}
+  await idb("readwrite",s=>s.delete(id));render();
+}
+function msg(t){$("#msg").textContent=t}
+function nameOf(p){const ps=itemPhotos(p.item);const i=ps.indexOf(p);return fileName(p.item,i,ps.length)}
+let savingAll=false;
+async function saveOne(p){
+  if(!state.ig){msg("Renseigne le code IG : la photo est gardée dans l'audit, tu pourras l'enregistrer ensuite avec « Enregistrer les manquantes ».");return "noig"}
+  const dl=DL;
+  if(!dl){msg("Enregistrement indisponible dans cette vue.");return "off"}
+  const name=nameOf(p);
+  try{await dl.save({filename:name,data:p.blob});p.saved=true;await idb("readwrite",s=>s.put(p));msg("Enregistrée sur le téléphone : "+name);render();return "ok"}
+  catch(e){const c=e&&e.code;msg(c==="declined"?"Non enregistrée sur le téléphone : "+name+" (elle reste dans l'audit).":c==="rate_limited"?"Une demande d'enregistrement est déjà ouverte. Réessaie avec « Enregistrer les manquantes ».":"Enregistrement impossible ("+(c||"erreur")+").");return c||"err"}
+}
+async function saveMissing(){
+  if(savingAll)return;
+  if(!state.ig){msg("Renseigne le code IG avant de sauvegarder, pour que les photos aient le bon nom.");$("#ig").focus();return}
+  
+  const dl=DL;
+  if(!dl){msg("Sauvegarde indisponible dans cette vue.");return}
+  const todo=photos.filter(p=>!p.saved);if(!todo.length)return;
+  savingAll=true;render();msg("Préparation de la sauvegarde…");
+  try{
+    const zip=new JSZip();todo.forEach(p=>zip.file(nameOf(p),p.blob,{date:new Date(p.ts)}));
+    const blob=await zip.generateAsync({type:"blob",compression:"STORE"});
+    const d=new Date(),hh=String(d.getHours()).padStart(2,"0"),mm=String(d.getMinutes()).padStart(2,"0");
+    await dl.save({filename:`${state.ig}_sauvegarde_${hh}h${mm}.zip`,data:blob});
+    for(const p of todo){p.saved=true;await idb("readwrite",s=>s.put(p))}
+    msg(`${todo.length} photo${todo.length>1?"s":""} sauvegardée${todo.length>1?"s":""} sur le téléphone (${state.ig}_sauvegarde_${hh}h${mm}.zip).`);
+  }catch(e){const c=e&&e.code;msg(c==="declined"?"Sauvegarde annulée : les photos restent dans l'audit.":c==="rate_limited"?"Une demande est déjà ouverte, réessaie dans un instant.":"Sauvegarde impossible ("+(c||"erreur")+").")}
+  finally{savingAll=false;render()}
+}
+$("#fMissing").onclick=saveMissing;
+function canShareFiles(){try{return !!(navigator.canShare&&navigator.canShare({files:[new File([new Blob(["x"],{type:"image/jpeg"})],"t.jpg",{type:"image/jpeg"})]}))}catch(e){return false}}
+const SHARE_OK=canShareFiles();
+async function toGallery(){
+  if(!state.ig){msg("Renseigne le code IG avant d'enregistrer, pour que les photos aient le bon nom.");$("#ig").focus();return}
+  const todo=photos.filter(p=>!p.saved);if(!todo.length)return;
+  const files=todo.map(p=>new File([p.blob],nameOf(p),{type:"image/jpeg",lastModified:p.ts}));
+  if(SHARE_OK){
+    try{await navigator.share({files});
+      for(const p of todo){p.saved=true;await idb("readwrite",s=>s.put(p))}
+      msg(`${todo.length} photo${todo.length>1?"s":""} envoyée${todo.length>1?"s":""}. Sur iPhone, choisis « Enregistrer ${todo.length>1?todo.length+" images":"l'image"} » pour la galerie.`);
+    }catch(e){msg(e&&e.name==="AbortError"?"Envoi annulé : les photos restent dans l'audit.":"Envoi impossible ("+(e&&e.name||"erreur")+").")}
+  }else{
+    for(const [i,p] of todo.entries()){download(nameOf(p),p.blob);p.saved=true;await idb("readwrite",s=>s.put(p));if(i<todo.length-1)await new Promise(r=>setTimeout(r,350))}
+    msg(`${todo.length} photo${todo.length>1?"s":""} téléchargée${todo.length>1?"s":""} : elles apparaissent dans la galerie (dossier Download).`);
+  }
+  render();
+}
+$("#fGallery").onclick=toGallery;
+let installEvt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;$("#install").hidden=false});
+$("#install").onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;$("#install").hidden=true};
+if("serviceWorker" in navigator&&(location.protocol==="https:"||location.hostname==="localhost")){navigator.serviceWorker.register("sw.js").catch(()=>{})}
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+
+$("#ig").value=state.ig;
+$("#ig").oninput=e=>{const v=cleanIG(e.target.value);if(v!==e.target.value)e.target.value=v;state.ig=v;lsSet();render()};
+$("#fSave").onclick=()=>{state.saveEach=state.saveEach===false;lsSet();stats()};
+$("#fTodo").onclick=e=>{filterTodo=!filterTodo;e.target.setAttribute("aria-pressed",filterTodo);render()};
+$("#fOpen").onclick=e=>{const on=e.target.getAttribute("aria-pressed")!=="true";e.target.setAttribute("aria-pressed",on);e.target.textContent=on?"Tout replier":"Tout déplier";document.querySelectorAll("details.sec").forEach(d=>d.open=on)};
+
+function csvCell(v){v=String(v??"");return /[";\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}
+$("#exp").onclick=async()=>{
+  if(!state.ig){msg("Renseigne le code IG avant d'exporter.");$("#ig").focus();return}
+  if(!photos.length){msg("Aucune photo à exporter.");return}
+  
+  const btn=$("#exp");btn.disabled=true;msg("Préparation du ZIP…");
+  try{
+    const zip=new JSZip();const rows=[["Section","Désignation","Statut","Nb photos","Fichiers","Commentaire"]];
+    const groups=[...SECTIONS.map(([s,a])=>[s,a.map(x=>x[0])]),["Photos libres",state.extra]];
+    groups.forEach(([s,codes])=>codes.forEach(c=>{
+      const ps=itemPhotos(c);const names=ps.map((p,i)=>fileName(c,i,ps.length));
+      ps.forEach((p,i)=>zip.file(names[i],p.blob,{date:new Date(p.ts)}));
+      rows.push([s,(ITEMS[c]||{l:c}).l,state.st[c]||"",ps.length,names.join(" | "),state.cm[c]||""]);
+    }));
+    zip.file(`${state.ig}_recap_photos.csv`,"﻿"+rows.map(r=>r.map(csvCell).join(";")).join("\r\n"));
+    const blob=await zip.generateAsync({type:"blob",compression:"STORE"});
+    const dl=DL;
+    if(!dl){msg("Téléchargement indisponible.");return}
+    await dl.save({filename:`${state.ig}_photos_audit.zip`,data:blob});
+    msg(`ZIP enregistré : ${photos.length} photos + récap CSV.`);
+  }catch(e){msg(e&&e.code==="declined"?"Export annulé.":"Export impossible ("+((e&&e.code)||"erreur")+"). Réessaie.")}
+  finally{btn.disabled=false}
+};
+
+let armed=false;
+$("#reset").onclick=async()=>{
+  if(!armed){armed=true;$("#reset").textContent="Confirmer ?";msg("Toutes les photos et statuts seront effacés. Appuie encore pour confirmer.");setTimeout(()=>{armed=false;$("#reset").textContent="Nouvel audit"},4000);return}
+  armed=false;$("#reset").textContent="Nouvel audit";
+  photos=[];urls.forEach(u=>URL.revokeObjectURL(u));urls.clear();await idb("readwrite",s=>s.clear());
+  state={ig:"",st:{},cm:{},extra:[],saveEach:false,v3:1};lsSet();$("#ig").value="";msg("Audit réinitialisé.");render();
+};
+
+(async()=>{
+  lsGet();if(!state.v3){state.saveEach=false;state.v3=1;lsSet()}$("#ig").value=state.ig;render();
+  const all=await idb("readonly",s=>s.getAll());if(all&&all.length){photos=all;render();msg(`${all.length} photo(s) restaurée(s) de la session précédente.`)}
+})();
+</script>
+</body>
+</html>
