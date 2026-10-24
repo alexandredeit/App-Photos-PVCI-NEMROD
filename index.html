@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>App Photos PVCI NEMROD</title>
+<title>TDF Nemrod PVCI</title>
 <meta name="theme-color" content="#0E56C9">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="PVCI NEMROD">
+<meta name="apple-mobile-web-app-title" content="Nemrod PVCI">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
 /* Layout: one-column field checklist, sticky site bar on top, sticky export bar at bottom */
@@ -273,12 +273,89 @@ header.top,.pill,footer.dock{will-change:transform}
 .edbar .col{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
 .edbar .col.on{border-color:var(--fg);box-shadow:0 0 0 2px var(--surface) inset}
 .edm .mrow{width:100%}
-.need{display:inline-block;margin-top:4px;font:600 12px var(--f-mono);padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--nok) 15%,transparent);color:var(--nok)}\n.need.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}\nheader.top .count{white-space:normal!important}\n.tog.galall{border-color:var(--ok);color:var(--ok)}\n</style>
+.need{display:inline-block;margin-top:4px;font:600 12px var(--f-mono);padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--nok) 15%,transparent);color:var(--nok)}\n.need.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}\nheader.top .count{white-space:normal!important}\n.tog.galall{border-color:var(--ok);color:var(--ok)}\n
+/* ===== v3.6 : Mes audits → audit → modules ===== */
+header.top h1{display:block;line-height:1.1;min-width:0;overflow:hidden}
+header.top h1 .ver{margin-left:6px}
+header.top .hname{white-space:nowrap}
+header.top .hsub{display:block;margin-top:2px;font:500 13px var(--f-body);letter-spacing:0;text-transform:none;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-height:calc((1 - var(--c)) * 18px);opacity:calc(1 - var(--c) * 1.6)}
+header.top .brand .left{min-width:0}
+.igmini{display:none!important}
+html:not([data-mode=list]) .ver{display:none}
+#backBtn{display:none}
+html:not([data-mode=list]) #backBtn{display:inline-flex}
+html:not([data-mode=list]) .hubback{display:none!important}
+html[data-mode=list] #nav,html[data-mode=list] header.top .bar,html[data-mode=list] .tools,html[data-mode=list] .count,html[data-mode=audit] .count{display:none!important}
+html[data-mode=audit] .tools{display:none!important}
+html[data-mode=list] footer.dock,html[data-mode=list] .pill,html[data-mode=audit] footer.dock,html[data-mode=audit] .pill{display:none!important}
+html[data-mode=list] main,html[data-mode=audit] main{padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+.nav{grid-template-columns:repeat(4,1fr)!important}
+
+/* écran Mes audits */
+.lhead h2{margin:4px 0 2px;font:700 26px var(--f-display);letter-spacing:.02em;text-transform:none}
+.lhead p{margin:0 0 4px;color:var(--muted);font-size:14px}
+.bignew{width:100%;padding:15px 16px;font-size:17px;background:var(--accent);color:var(--accent-fg)}
+.btn.wide{width:100%;flex:none}
+#home,#aview{display:flex;flex-direction:column;gap:12px}
+#home[hidden],#aview[hidden]{display:none}
+.acard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.acard.aud{border-left:4px solid var(--accent);cursor:pointer;transition:transform .15s var(--ease),box-shadow .2s}
+.acard.aud:active{transform:scale(.99)}
+.atop{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.aig{font:700 21px var(--f-display);letter-spacing:.03em}
+.tag{font:700 11px var(--f-body);letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.tag.ok{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.tag.nc{background:color-mix(in srgb,var(--nok) 14%,transparent);color:var(--nok)}
+.acom{font-size:15px;color:var(--fg)}
+.amini{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.amini .bar{height:6px;border-radius:3px;background:var(--chip);overflow:hidden;margin:0}
+.amini .bar i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.amini b{font:600 12px var(--f-mono);color:var(--fg)}
+.ameta{font:500 12px var(--f-mono);color:var(--muted)}
+.ameta .warn{color:var(--nok);font-weight:700}
+.abtns{display:flex;gap:8px;margin-top:4px}
+.abtns .btn{flex:1}
+.btn.sm{font-size:14px;padding:9px 10px}
+.empty{text-align:center;color:var(--muted);margin:22px 0;line-height:1.5}
+.instl{width:100%}
+
+/* écran de l'audit */
+.acard.site{gap:8px}
+.acard.site .igrow{display:flex;align-items:center;gap:10px;max-height:none!important;opacity:1!important;transform:none!important;margin:0!important;overflow:visible!important}
+.acard.site .igrow input{flex:1;font-size:20px}
+.sitecom{font-size:14px;color:var(--muted)}
+.ah3{margin:6px 2px 0;font:700 14px var(--f-display);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.mtiles{display:flex;flex-direction:column;gap:10px}
+.mtile{display:grid;grid-template-columns:52px 1fr 20px;align-items:center;gap:12px;text-align:left;background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:14px;padding:14px 14px 14px 12px;cursor:pointer;color:var(--fg);font:inherit;width:100%}
+.mtile:active{transform:scale(.99)}
+.mic{width:52px;height:52px;border-radius:12px;background:color-mix(in srgb,var(--accent) 12%,transparent);color:var(--accent);display:flex;align-items:center;justify-content:center}
+.mic svg{width:26px;height:26px}
+.mtx{display:flex;flex-direction:column;gap:3px;min-width:0}
+.mtx b{font:700 19px var(--f-display);letter-spacing:.02em}
+.mtx small{font-size:13px;color:var(--muted);line-height:1.35}
+.mtx .tstat{font:600 12px var(--f-mono);color:var(--fg)}
+.mtx .bar{display:block;height:5px;border-radius:3px;background:var(--chip);overflow:hidden;margin-top:2px}
+.mtx .bar i{display:block;height:100%;background:var(--accent)}
+.mch{color:var(--muted)}
+.mch svg{width:20px;height:20px}
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.abtn{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:13px 12px;color:var(--fg);font:600 14px var(--f-body);text-align:left;cursor:pointer}
+.abtn svg{width:22px;height:22px;flex:none;color:var(--accent)}
+.abtn.prim{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.abtn.prim svg{color:var(--accent-fg)}
+.abtn.wide{grid-column:1/-1}
+.ainfo{display:flex;flex-wrap:wrap;gap:6px 14px;font:500 13px var(--f-body);color:var(--muted);padding:0 2px}
+#aview .danger-zone{margin-top:6px}
+.nig{width:100%;font:600 22px var(--f-mono);padding:12px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--fg);letter-spacing:.04em}
+.lnk{background:none;border:0;color:var(--accent);font:600 14px var(--f-body);padding:6px;cursor:pointer;align-self:center}
+@media (min-width:821px){.mtiles{display:grid;grid-template-columns:repeat(3,1fr)}.mtile{grid-template-columns:1fr;align-content:start}.mch{display:none}.agrid{grid-template-columns:repeat(3,1fr)}.abtn.wide{grid-column:auto}}
+
+</style>
 </head>
 <body>
 
 <header class="top"><div class="wrap">
-  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><img src="data:image/png;base64,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" alt="" width="34" height="34"></button><h1>PVCI NEMROD <small class="ver">v3.5.1</small><small class="igmini" id="igmini"></small></h1></div><span class="count" id="count"></span></div>
+  <div class="brand"><div class="left"><button class="homebtn" id="goHome" aria-label="Accueil"><img src="data:image/png;base64,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" alt="" width="34" height="34"></button><h1>PVCI NEMROD <small class="ver">v3.6</small><small class="igmini" id="igmini"></small></h1></div><span class="count" id="count"></span></div>
   <div class="igrow"><label for="ig">Code IG</label><input id="ig" placeholder="ex. 33318001" autocomplete="off" autocapitalize="characters" spellcheck="false"></div>
   <div class="nav" id="nav"><button data-v="photos" aria-current="false">Photos<span class="n" id="navP"></span></button><button data-v="excel" aria-current="false">Excel<span class="n" id="navX"></span></button><button data-v="guide" aria-current="false">Visite<span class="n" id="navG"></span></button></div>
   <div class="bar" aria-hidden="true"><i id="prog"></i></div>
@@ -1179,7 +1256,7 @@ function checkItems(){
   const bad=photos.filter(p=>p.q&&(p.q.blur||p.q.dark)&&!p.q.ok);
   const key=XF.find(f=>f.tab==="Moyen d'accès"&&/changement de code/i.test(f.label));
   const vt=XF.find(f=>/Date de visite technique/.test(f.label));
-  out.push({ok:!!state.ig,t:state.ig?"Code IG renseigné":"Code IG non renseigné",fix:()=>{setView(view==="home"?"excel":view);$("#ig").focus()}});
+  out.push({ok:!!state.ig,t:state.ig?"Code IG renseigné":"Code IG non renseigné",fix:()=>{setView("audit");setTimeout(()=>$("#ig").focus(),60)}});
   out.push({ok:!missP.length,t:missP.length?`${missP.length} ligne${missP.length>1?"s":""} photo incomplète${missP.length>1?"s":""} (sans photo ni « SO »)`:"Toutes les lignes photo sont faites",list:missP.map(c=>({l:(ITEMS[c]||{l:c}).l+(MINP[c]?` (${itemPhotos(c).length}/${MINP[c]} photos)`:""),go:()=>goPhoto(c)}))});
   out.push({ok:!noSt.length,t:noSt.length?`${noSt.length} ligne${noSt.length>1?"s":""} PVCI sans statut`:"Toutes les lignes PVCI ont un statut",list:noSt.map(f=>({l:`${f.tab} · ${f.label}`,go:()=>goField(f)}))});
   out.push({ok:!ncNoCm.length&&!nokNoCm.length,t:(ncNoCm.length+nokNoCm.length)?`${ncNoCm.length+nokNoCm.length} non-conformité${ncNoCm.length+nokNoCm.length>1?"s":""} sans commentaire`:"Toutes les non-conformités sont commentées",list:[...ncNoCm.map(f=>({l:`${f.tab} · ${f.label}`,go:()=>goField(f)})),...nokNoCm.map(c=>({l:`Photo · ${(ITEMS[c]||{l:c}).l}`,go:()=>goPhoto(c)}))]});
@@ -1492,6 +1569,178 @@ function openResetModal(){newAudit()}
 edInit();
 $("#checkModal").addEventListener("click",e=>{if(e.target.id==="checkModal"||e.target.closest("[data-cclose]"))closeCheck()});
 document.querySelectorAll("[data-check]").forEach(b=>b.onclick=openCheck);
+
+// ================= v3.6 : Mes audits → l'audit → Visite / Photos / PVCI =================
+const APP_NAME="TDF Nemrod PVCI";
+const MODS=["photos","excel","guide"];
+const CHEV_L='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+const CHEV_R='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+const IC={
+  route:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8.5 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.5"/></svg>',
+  cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+  grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h11"/></svg>',
+  zip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-7z"/></svg>',
+  gal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 8"/></svg>',
+  mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>'
+};
+
+// ---------- mise en place de l'interface ----------
+(function(){
+  document.title=APP_NAME;
+  const h1=document.querySelector("header.top h1");
+  h1.innerHTML=`<span class="hname" id="hname">${APP_NAME}</span><small class="ver">v3.6</small><small class="igmini" id="igmini"></small><span class="hsub" id="hsub"></span>`;
+  // bouton retour (vers « Mes audits »)
+  const back=document.createElement("button");back.className="homebtn backbtn";back.id="backBtn";back.setAttribute("aria-label","Retour à Mes audits");back.innerHTML=CHEV_L;
+  back.onclick=()=>setView("list");$("#goHome").before(back);
+  $("#goHome").onclick=()=>setView("list");$("#goHome").setAttribute("aria-label","Mes audits");
+  // onglets : Audit · Visite · Photos · PVCI
+  const nav=$("#nav");const bA=document.createElement("button");bA.dataset.v="audit";bA.setAttribute("aria-current","false");bA.innerHTML='Audit<span class="n" id="navA"></span>';
+  bA.onclick=()=>setView("audit");nav.prepend(bA);
+  const bG=nav.querySelector('[data-v="guide"]');bA.after(bG);
+  const bX=nav.querySelector('[data-v="excel"]');bX.firstChild.textContent="PVCI";
+  // pages : liste des audits (#home) + page de l'audit (#aview) avec le champ Code IG déplacé dedans
+  const av=document.createElement("div");av.className="wrap";av.id="aview";av.hidden=true;
+  av.innerHTML=`<div class="acard site"><div class="sitef"></div><div class="sitecom" id="aCom"></div></div><div id="aDyn"></div>`;
+  $("#home").after(av);
+  const ig=document.querySelector("header.top .igrow");av.querySelector(".sitef").appendChild(ig);
+  $("#ig").addEventListener("input",()=>{hdrUpdate()});
+  const inst=$("#install");if(inst){inst.classList.add("instl");$("#home").after(inst)}
+})();
+
+// ---------- en-tête selon l'écran ----------
+function curMode(){return view==="list"?"list":view==="audit"?"audit":"mod"}
+function hdrUpdate(){
+  const m=curMode();document.documentElement.dataset.mode=m;
+  const com=fieldVal("Identification","Commune");
+  if(m==="list"){$("#hname").textContent=APP_NAME;$("#hsub").textContent="Mes audits · hors ligne"}
+  else{$("#hname").textContent=state.ig?"Audit "+state.ig:"Nouvel audit";$("#hsub").textContent=com||(state.ig?APP_NAME:"Code IG à saisir")}
+  const ac=$("#aCom");if(ac)ac.textContent=com?com+(fieldVal("Identification","Adresse")?" · "+fieldVal("Identification","Adresse"):""):"Commune et adresse : à saisir dans le PVCI (onglet Identification).";
+}
+
+// ---------- navigation ----------
+function setView(v,initial){
+  if(v==="home")v=initial?"list":"audit";
+  if(initial&&!["list","audit",...MODS].includes(v))v="list";
+  if(initial&&v!=="list"&&!state.ig)v="list";
+  if(!initial)scrollPos[view]=window.scrollY;
+  const prev=view;view=v;state.view=v;lsSet();
+  $("#home").hidden=v!=="list";$("#aview").hidden=v!=="audit";
+  $("#list").hidden=v!=="photos";$("#xlist").hidden=v!=="excel";$("#glist").hidden=v!=="guide";
+  document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===v));
+  const mod=MODS.includes(v);
+  $("#fTodo").hidden=!mod;$("#fOpen").hidden=!mod||v==="guide";$("#fCheck").hidden=!mod;$("#xExp").hidden=v!=="excel";$("#xImp").hidden=v!=="excel";
+  hdrUpdate();
+  if(v==="list")renderList();
+  if(v==="audit")renderAudit();
+  if(v==="guide")renderGuide();
+  stats();xStats();
+  if(typeof applyC==="function"&&prev!==v&&(prev==="list")!==(v==="list"))applyC(0,true);
+  window.scrollTo(0,v==="list"?0:(scrollPos[v]||0));
+}
+function renderHome(){
+  siteIndexTouch();
+  if(view==="list")renderList();else if(view==="audit")renderAudit();
+  hdrUpdate();xStats();
+}
+function showToast(t){if(!t)return;if(docked&&curMode()==="mod")return;toast.textContent=t;toast.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>toast.classList.remove("show"),3800)}
+
+// ---------- écran 1 : Mes audits ----------
+const isEmptyAudit=s=>!s.ig&&!s.np&&!s.xd;
+function auditList(){
+  const cur=siteSummary();let l=sitesGet().filter(s=>s.id!==state.siteId);
+  // ménage : audits vides abandonnés
+  const empties=l.filter(isEmptyAudit);if(empties.length){empties.forEach(s=>{try{localStorage.removeItem("pvci_site_"+s.id)}catch(e){}});sitesSet(sitesGet().filter(s=>!empties.some(e=>e.id===s.id)))}
+  l=l.filter(s=>!isEmptyAudit(s));if(!isEmptyAudit(cur))l.push(cur);
+  return l.sort((a,b)=>(b.updated||0)-(a.updated||0));
+}
+function miniBar(lbl,a,n){const p=n?Math.round(a/n*100):0;return `<div class="amini"><span>${lbl}</span><div class="bar"><i style="width:${p}%"></i></div><b>${a}/${n}</b></div>`}
+function renderList(){
+  const l=auditList();
+  $("#home").innerHTML=`
+  <div class="lhead"><h2>Mes audits</h2><p>Un audit par site. Tout reste sur ce téléphone et fonctionne hors ligne.</p></div>
+  <button class="btn main bignew" id="lNew">+ Nouvel audit</button>
+  <button class="btn ghost wide" id="lImp">Reprendre un audit (ZIP ou Excel)</button>
+  ${l.length?l.map(s=>{const miss=s.id===state.siteId?photos.filter(p=>!p.saved).length:0;
+    return `<div class="acard aud" data-open="${s.id}" role="button" tabindex="0">
+      <div class="atop"><b class="aig">${esc(s.ig||"Sans code IG")}</b>${s.lastExport?'<span class="tag ok">Exporté</span>':'<span class="tag">En cours</span>'}${s.nc?`<span class="tag nc">${s.nc} NC</span>`:""}</div>
+      <div class="acom">${esc(s.commune||"Commune à renseigner")}</div>
+      ${miniBar("Photos",s.pd||0,s.pt||120)}${miniBar("PVCI",s.xd||0,s.xt||XF.length)}
+      <div class="ameta">${s.np||0} photo${(s.np||0)>1?"s":""} · modifié le ${fmtDay(s.updated||Date.now())}${miss?` · <span class="warn">${miss} non sauvegardée${miss>1?"s":""}</span>`:""}</div>
+      <div class="abtns"><button class="btn send sm" data-go="${s.id}">Ouvrir</button><button class="btn ghost sm" data-del="${s.id}">Supprimer</button></div>
+    </div>`}).join(""):`<p class="empty">Aucun audit pour l'instant.<br>Crée le premier avec « Nouvel audit ».</p>`}
+  <p class="hint">Les audits restent ici jusqu'à ce que tu les supprimes. Pense à exporter le ZIP à la fin de chaque visite.</p>`;
+  const h=$("#home");const inst=$("#install");if(inst)h.appendChild(inst);
+  h.querySelectorAll(".aud").forEach(c=>{c.onclick=e=>{if(e.target.closest("[data-del]"))return;openAudit(c.dataset.open)};c.onkeydown=e=>{if(e.key==="Enter")openAudit(c.dataset.open)}});
+  h.querySelectorAll("[data-del]").forEach(b=>b.onclick=async e=>{e.stopPropagation();await deleteSite(b.dataset.del);if(view!=="list")setView("list");else renderList()});
+  $("#lNew").onclick=askNewAudit;
+  $("#lImp").onclick=async()=>{await startAudit("",false);xfile.value="";xfile.click()};
+}
+async function openAudit(id){if(id!==state.siteId)await switchSite(id);setView("audit")}
+async function startAudit(ig,go=true){
+  if(!isEmptyAudit(siteSummary())){lsSet();siteIndexTouch()}
+  state=freshState();photos=[];urls.forEach(u=>URL.revokeObjectURL(u));urls.clear();
+  state.ig=ig;$("#ig").value=ig;lsSet();if(ig)siteIndexTouch();render();renderX();renderGuide();
+  if(go){setView("audit");msg(ig?`Audit ${ig} créé.`:"Audit créé : saisis le code IG.")}
+}
+function newAudit(){askNewAudit()}
+function openResetModal(){askNewAudit()}
+function askNewAudit(){
+  let m=$("#newModal");
+  if(!m){m=document.createElement("div");m.className="modal";m.id="newModal";m.hidden=true;m.setAttribute("role","dialog");m.setAttribute("aria-modal","true");
+    m.innerHTML=`<div class="mbox"><h3>Nouvel audit</h3><p>Saisis le code IG du site. Il sert à nommer toutes les photos.</p>
+      <input id="nIg" class="nig" placeholder="ex. 33318001" autocomplete="off" autocapitalize="characters" spellcheck="false" inputmode="text">
+      <p class="mwarn" id="nWarn"></p>
+      <div class="mrow"><button class="btn ghost" id="nNo">Annuler</button><button class="btn send" id="nYes">Créer l'audit</button></div>
+      <button class="lnk" id="nLater">Créer sans code IG pour l'instant</button></div>`;
+    document.body.appendChild(m);
+    $("#nIg").oninput=e=>{const v=cleanIG(e.target.value);if(v!==e.target.value)e.target.value=v;const ex=sitesGet().find(s=>s.ig&&s.ig===v&&!(s.id===state.siteId&&isEmptyAudit(siteSummary())));
+      $("#nWarn").innerHTML=ex?`Un audit <b>${esc(v)}</b> existe déjà sur ce téléphone.`:"";$("#nYes").textContent=ex?"Ouvrir l'existant":"Créer l'audit";$("#nYes").dataset.ex=ex?ex.id:""};
+    $("#nIg").onkeydown=e=>{if(e.key==="Enter")$("#nYes").click()};
+    $("#nNo").onclick=()=>m.hidden=true;m.onclick=e=>{if(e.target===m)m.hidden=true};
+    $("#nYes").onclick=async()=>{const v=cleanIG($("#nIg").value);const ex=$("#nYes").dataset.ex;
+      if(ex){m.hidden=true;openAudit(ex);return}
+      if(!v){$("#nWarn").textContent="Saisis le code IG, ou crée l'audit sans code.";$("#nIg").focus();return}
+      m.hidden=true;await startAudit(v)};
+    $("#nLater").onclick=async()=>{m.hidden=true;await startAudit("")};
+  }
+  $("#nIg").value="";$("#nWarn").textContent="";$("#nYes").textContent="Créer l'audit";$("#nYes").dataset.ex="";m.hidden=false;setTimeout(()=>$("#nIg").focus(),60);
+}
+
+// ---------- écran 2 : l'audit ----------
+function renderAudit(){
+  siteIndexTouch();
+  const codes=allCodes(),pd=codes.filter(isDone).length,xd=XF.filter(xDone).length,nc=XF.filter(f=>xget(f.id).st==="Non conforme").length;
+  const gp=guideProgress(),GS=(GSTEPS||GSTEPS_DEF);const miss=photos.filter(p=>!p.saved).length;
+  const since=state.lastExport?Date.now()-state.lastExport:null;const remind=miss&&(miss>=10||!state.lastExport||since>45*60000);
+  const tile=(v,ic,t,p,st,a,n)=>`<button class="mtile" data-v="${v}"><span class="mic">${ic}</span><span class="mtx"><b>${t}</b><small>${p}</small><span class="tstat">${st}</span><span class="bar"><i style="width:${n?a/n*100:0}%"></i></span></span><span class="mch">${CHEV_R}</span></button>`;
+  $("#aDyn").innerHTML=`
+  ${remind?`<div class="remind"><b>${miss} photo${miss>1?"s":""} pas encore sauvegardée${miss>1?"s":""}</b><span>${state.lastExport?"Dernier export : "+fmtDate(state.lastExport):"Aucun export de cet audit pour l'instant"}. Une copie protège ton travail si le téléphone a un souci.</span><div class="mrow"><button class="btn send" id="hSave">Sauvegarder (1 ZIP)</button><button class="btn ghost" id="hGal">Vers la galerie</button></div></div>`:""}
+  <h3 class="ah3">L'audit</h3>
+  <div class="mtiles">
+  ${tile("guide",IC.route,"Visite guidée","Le parcours du site étape par étape, photos et PVCI ensemble.",`étape ${Math.min((state.gstep||0)+1,GS.length)}/${GS.length} · ${gp.a}/${gp.n} points`,gp.a,gp.n)}
+  ${tile("photos",IC.cam,"Photos","120 lignes, nommage automatique CodeIG_Désignation.jpg.",`${photos.length} photo${photos.length>1?"s":""} · ${pd}/${codes.length} lignes faites`,pd,codes.length)}
+  ${tile("excel",IC.grid,"PVCI Excel","Le procès-verbal ligne par ligne, export au modèle TDF.",`${xd}/${XF.length} lignes · ${nc} non conforme${nc>1?"s":""}`,xd,XF.length)}
+  </div>
+  <h3 class="ah3">Avant de partir et envoi</h3>
+  <div class="agrid">
+    <button class="abtn" id="aCheck">${IC.check}<span>Contrôle avant départ</span></button>
+    <button class="abtn prim" id="aZip">${IC.zip}<span>Exporter le ZIP</span></button>
+    <button class="abtn" id="aSend">${IC.send}<span>Envoyer</span></button>
+    <button class="abtn" id="aGal">${IC.gal}<span>Photos vers la galerie</span></button>
+    <button class="abtn wide" id="aMail">${IC.mail}<span>Copier le mail récap</span></button>
+  </div>
+  <div class="ainfo">${tmTotal()?`<span>Temps actif : <b>${fmtDur(tmTotal())}</b></span>`:""}<span>${state.lastExport?"Exporté le "+fmtDate(state.lastExport):"Pas encore exporté"}</span></div>
+  <div class="danger-zone"><p>Audit terminé et envoyé ? Tu peux le garder ici ou le supprimer de ce téléphone.</p><button class="btn outline-danger" id="aDel">Supprimer cet audit</button></div>`;
+  const d=$("#aDyn");
+  d.querySelectorAll(".mtile").forEach(t=>t.onclick=()=>setView(t.dataset.v));
+  $("#aCheck").onclick=openCheck;$("#aZip").onclick=()=>$("#exp").click();$("#aSend").onclick=()=>$("#send").click();
+  $("#aGal").onclick=()=>allToGallery();$("#aMail").onclick=copyMail;
+  $("#aDel").onclick=async()=>{const id=state.siteId;await deleteSite(id);if(!sitesGet().some(s=>s.id===id))setView("list")};
+  const hs=$("#hSave");if(hs)hs.onclick=()=>saveMissing();const hg=$("#hGal");if(hg)hg.onclick=()=>toGallery();
+  hdrUpdate();
+}
 
 (async()=>{
   lsGet();if(!state.v3){state.v3=1}state.saveEach=false;if(!state.xl)state.xl={};
